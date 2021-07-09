@@ -1,4 +1,4 @@
-## 1a. Getting familiar with Terraform commands and files
+## 1. Getting familiar with Terraform commands and files
 - Clone the following Git repository
 
 `git clone `  
