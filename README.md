@@ -1072,7 +1072,7 @@ This is a key principle of how Terraform works. Terraform will only interact wit
 
 Since we effectively removed the statefile, Terraform did not know the ACI objects already existed and tried to recreate them.
 
-#### Will the plan apply correctly since the objects already exist?
+### Will the plan apply correctly since the objects already exist?
 
 - Push the configuration to the ACI fabric using the `apply` command  
 
@@ -1125,7 +1125,7 @@ As you can see the apply should have gone through successfully, even though the 
 
 You'll also note that you should now have a new `terraform.tfstate` file alongside your `terraform.tfstate_hidden` file. This is because terraform did not find a file with the name, `terraform.tfstate`, and creatd a new one for you.
 
-#### What happens if delete the Terraform ACI config?
+### What happens if delete the Terraform ACI config?
 - Rename the ACI configuration file so Terraform can't find it
 
 - `mv aci.tf aci.tf_hidden`
