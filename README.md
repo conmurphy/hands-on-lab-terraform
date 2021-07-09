@@ -5,7 +5,7 @@
 
 - Navigate to the folder containing the first lesson
 
-`cd hands-on-lab-terraform/lesson_01/single_file/`  
+`cd hands-on-lab-terraform/lesson_01/`  
 
 - In a browser go to https://sandboxapicdc.cisco.com/ and login (`admin`/`ciscopsdt`)  
 
@@ -462,20 +462,11 @@ can't guarantee that exactly these actions will be performed if
   ```
 </details>
 
-### Summary
-<details>
-  <summary>Click to read the lesson summary</summary>
-
-   We successfully initialised, planned, and applied our first Terraform configuration. You then deleted the Tenant and all associated configuration.
-
-   If you look through the `main.tf` file you will see all the configuration necessary to build your ACI Tenant, Application Profile, EPGs, and Bridge Domain.
-</details>
-
-## 1b. Config structure and variables
+## 2. Config structure and variables
 
 - Navigate to the next lesson
 
-`cd hands-on-lab-terraform/lesson_01/multiple_files/`
+`cd hands-on-lab-terraform/lesson_02/`
 
 You will notice that instead of a single `main.tf` file we now have multiple `.tf` files. By default Terraform will read all `.tf` files in the directory from which the Terraform command was ran. 
 
@@ -820,7 +811,7 @@ The names of the files do not matter so long as they end in `.tf`. In our exampl
 `terraform destroy`
 
 
-## 1c. More on Variables and Dependencies
+## 3. More on Variables and Dependencies
 
 
 We've already seen some variables used to store the URL, username, password, and ACI tenant name. We also have other options to store data, such as **Terraform Local Values**
@@ -837,7 +828,7 @@ https://learn.hashicorp.com/tutorials/terraform/locals
 
 - Navigate to the next lesson
 
-`cd hands-on-lab-terraform/lesson_01/variables_and_dependencies/`
+`cd hands-on-lab-terraform/lesson_03/`
 
 - Open the `variables.tf` file and view the new local values we have. 
 
@@ -1074,7 +1065,7 @@ You can also see that the application profile is linked to the Tenant ID in the 
   https://www.terraform.io/docs/language/meta-arguments/depends_on.html
 
 
-## 2. Understanding Terraform State
+## 3b. Understanding Terraform State
 
 So far we've been configuring our ACI fabric with Terraform however how is the configuration tracked? 
 
@@ -1090,6 +1081,9 @@ This is performed through the use of a Statefile.
   https://www.terraform.io/docs/language/state/index.html
 
 </details>
+- If you're noot still in lesson_03, navigate to the folder
+
+`cd hands-on-lab-terraform/lesson_03/`
 
 - Run another `plan` and confirm that no new objects are created.
 
@@ -1556,10 +1550,198 @@ Based on this it assumed the ACI configuration was no longer needed and removed 
 
 [Example of when things go wrong](https://www.youtube.com/watch?v=ix0Tw8uinWs)
 
+- Cleanup your ACI configuration and all objects within that tenant.
 
-## Resources vs Data Source
+`terraform destroy`
+
+
+## 4. Resources vs Data Source
+
+So far we've been creatomg, updating, and deleting resources with Terraform. What happens if a resource is already configured and we simply need to reference it?
+
+We can use the Terraform `data source` to access configuration created outside of Terraform or by another Terraform plan. The data source is **read only**
+
+https://www.terraform.io/docs/language/data-sources/index.html
+
+- Navigate to the folder containing the next lesson
+
+`cd hands-on-lab-terraform/lesson_04/`  
+
+- Open `aci.tf` in your text editor and have a look at the `aci_tenant`. As you can see, rather than `resource "aci_tenant" "aci_tenant" {` we are using `data "aci_tenant" "aci_tenant" {`
+
+Notice that we are specifying the name of a tenant, `common`. Terraform will not create a tenant like in previous lessons but instead use this existing tenant to create our application profiles and EPGs.
+
+- Initialise Terraform  
+
+`terraform init`
+
+- Run a plan and look at the results
+
+`terraform plan`
+
+  - When prompted for the `aci_app_name` use your **username**
+  ```
+  var.aci_app_name
+      Enter a value: conmurphy
+  ```
+
+<details>
+  <summary>Click to see expected output</summary>
+  
+  ```
+    An execution plan has been generated and is shown below.
+    Resource actions are indicated with the following symbols:
+      + create
+
+    Terraform will perform the following actions:
+
+      # aci_application_epg.db will be created
+      + resource "aci_application_epg" "db" {
+          + annotation             = "orchestrator:terraform"
+          + application_profile_dn = (known after apply)
+          + description            = "this is the database epg created by terraform"
+          + exception_tag          = (known after apply)
+          + flood_on_encap         = "enabled"
+          + fwd_ctrl               = "none"
+          + has_mcast_source       = "no"
+          + id                     = (known after apply)
+          + is_attr_based_epg      = (known after apply)
+          + match_t                = "AtleastOne"
+          + name                   = "db"
+          + name_alias             = "db"
+          + pc_enf_pref            = "unenforced"
+          + pref_gr_memb           = "exclude"
+          + prio                   = "unspecified"
+          + shutdown               = "no"
+        }
+
+      # aci_application_epg.web will be created
+      + resource "aci_application_epg" "web" {
+          + annotation             = "orchestrator:terraform"
+          + application_profile_dn = (known after apply)
+          + description            = "this is the web epg created by terraform"
+          + exception_tag          = (known after apply)
+          + flood_on_encap         = "enabled"
+          + fwd_ctrl               = "none"
+          + has_mcast_source       = "no"
+          + id                     = (known after apply)
+          + is_attr_based_epg      = (known after apply)
+          + match_t                = "AtleastOne"
+          + name                   = "web"
+          + name_alias             = "web"
+          + pc_enf_pref            = "unenforced"
+          + pref_gr_memb           = "exclude"
+          + prio                   = "unspecified"
+          + shutdown               = "no"
+        }
+
+      # aci_application_profile.myWebsite will be created
+      + resource "aci_application_profile" "myWebsite" {
+          + annotation  = "orchestrator:terraform"
+          + description = (known after apply)
+          + id          = (known after apply)
+          + name        = "conmurphy"
+          + name_alias  = (known after apply)
+          + prio        = (known after apply)
+          + tenant_dn   = "uni/tn-common"
+        }
+
+      # aci_bridge_domain.bd_for_subnet will be created
+      + resource "aci_bridge_domain" "bd_for_subnet" {
+          + annotation                  = "orchestrator:terraform"
+          + arp_flood                   = (known after apply)
+          + bridge_domain_type          = (known after apply)
+          + description                 = "This bridge domain is created by the Terraform ACI provider"
+          + ep_clear                    = (known after apply)
+          + ep_move_detect_mode         = (known after apply)
+          + host_based_routing          = (known after apply)
+          + id                          = (known after apply)
+          + intersite_bum_traffic_allow = (known after apply)
+          + intersite_l2_stretch        = (known after apply)
+          + ip_learning                 = (known after apply)
+          + ipv6_mcast_allow            = (known after apply)
+          + limit_ip_learn_to_subnets   = (known after apply)
+          + ll_addr                     = (known after apply)
+          + mac                         = (known after apply)
+          + mcast_allow                 = (known after apply)
+          + multi_dst_pkt_act           = (known after apply)
+          + name                        = "bd_for_subnet"
+          + name_alias                  = (known after apply)
+          + optimize_wan_bandwidth      = (known after apply)
+          + tenant_dn                   = "uni/tn-common"
+          + unicast_route               = (known after apply)
+          + unk_mac_ucast_act           = (known after apply)
+          + unk_mcast_act               = (known after apply)
+          + v6unk_mcast_act             = (known after apply)
+          + vmac                        = (known after apply)
+        }
+
+      # aci_subnet.demosubnet will be created
+      + resource "aci_subnet" "demosubnet" {
+          + annotation  = "orchestrator:terraform"
+          + ctrl        = (known after apply)
+          + description = "This subject is created by Terraform"
+          + id          = (known after apply)
+          + ip          = "172.16.1.1/24"
+          + name_alias  = (known after apply)
+          + parent_dn   = (known after apply)
+          + preferred   = (known after apply)
+          + scope       = "private"
+          + virtual     = (known after apply)
+        }
+
+    Plan: 5 to add, 0 to change, 0 to destroy.
+
+    Changes to Outputs:
+      + application_profile_id = (known after apply)
+
+    ------------------------------------------------------------------------
+
+    Note: You didn't specify an "-out" parameter to save this plan, so Terraform
+    can't guarantee that exactly these actions will be performed if
+    "terraform apply" is subsequently run.
+  ```
+</details>
+
+
+- Notice in the output that the `resource aci_application_profile` references the tenant `common`
+
+- Apply the configuration to the ACI fabric with your **username** as the `aci_app_name`
+
+`terraform apply --auto-approve`
+
+<details>
+  <summary>Click to see expected output</summary>
+  
+  ```
+    aci_application_profile.myWebsite: Creating...
+    aci_bridge_domain.bd_for_subnet: Creating...
+    aci_application_profile.myWebsite: Creation complete after 0s [id=uni/tn-common/ap-conmurphy]
+    aci_application_epg.web: Creating...
+    aci_application_epg.db: Creating...
+    aci_bridge_domain.bd_for_subnet: Creation complete after 1s [id=uni/tn-common/BD-bd_for_subnet]
+    aci_subnet.demosubnet: Creating...
+    aci_application_epg.db: Creation complete after 2s [id=uni/tn-common/ap-conmurphy/epg-db]
+    aci_application_epg.web: Creation complete after 2s [id=uni/tn-common/ap-conmurphy/epg-web]
+    aci_subnet.demosubnet: Creation complete after 1s [id=uni/tn-common/BD-bd_for_subnet/subnet-[172.16.1.1/24]]
+
+    Apply complete! Resources: 5 added, 0 changed, 0 destroyed.
+
+    Outputs:
+
+    application_profile_id = "uni/tn-common/ap-conmurphy"
+  ```
+</details>
+
+- In a browser go to https://sandboxapicdc.cisco.com/ and login (`admin`/`ciscopsdt`)  
+
+- Click on the `Tenant` tab and then double click to view the `common` tenant
+
+- Expand the `Application Profiles` and verify that a profile with your username exists
+
+
 ## Importing
-## More on variables
+
 ## Modules
 
 ## Optional: Other Useful Terraform Commands
