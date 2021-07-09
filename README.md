@@ -4,6 +4,7 @@
 `git clone `  
 
 - Navigate to the folder containing the first lesson
+
 `cd hands-on-lab-terraform/lesson_01/single_file/`  
 
 - Navigate to https://sandboxapicdc.cisco.com/ and login (`admin`/`ciscopsdt`)  
@@ -11,6 +12,7 @@
 - Verify that no tenant exists with your Cisco username  
 
 - Initialise Terraform - This will download the required Terraform providers  
+
 `terraform init`  
 
 <details>
@@ -64,9 +66,11 @@
 </details>
   
 - Perform a dry run of your Terraform configuration using the `plan` command. You should see resources that will be created. 
+
 `terraform plan`  
 
   - You will need to enter the ACI URL, username, and password  
+
 
   ```
   var.apic_password
@@ -81,7 +85,8 @@
 
   
 
-- Push the configuration to the ACI fabric using the `apply` command
+- Push the configuration to the ACI fabric using the `apply` command  
+
 `terraform apply`  
 
 - Verify in the ACI GUI that your 
