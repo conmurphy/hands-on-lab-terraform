@@ -1,5 +1,6 @@
 # 1. Getting familiar with Terraform commands and files
 - Clone the following Git repository
+
 `git clone `  
 
 - Navigate to the folder containing the first lesson
