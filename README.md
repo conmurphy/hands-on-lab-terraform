@@ -15,55 +15,55 @@
 
 `terraform init`  
 
-  <details>
-    <summary>Click to see expected output</summary>
-    
-    ```
-    Initializing the backend...
+<details>
+  <summary>Click to see expected output</summary>
+  
+  ```
+  Initializing the backend...
 
-      Initializing provider plugins...
-      - Finding ciscodevnet/aci versions matching "0.4.1"...
-      - Installing ciscodevnet/aci v0.4.1...
-      - Installed ciscodevnet/aci v0.4.1 (signed by a HashiCorp partner, key ID 433649E2C56309DE)
+    Initializing provider plugins...
+    - Finding ciscodevnet/aci versions matching "0.4.1"...
+    - Installing ciscodevnet/aci v0.4.1...
+    - Installed ciscodevnet/aci v0.4.1 (signed by a HashiCorp partner, key ID 433649E2C56309DE)
 
-      Partner and community providers are signed by their developers.
-      If you'd like to know more about provider signing, you can read about it here:
-      https://www.terraform.io/docs/cli/plugins/signing.html
+    Partner and community providers are signed by their developers.
+    If you'd like to know more about provider signing, you can read about it here:
+    https://www.terraform.io/docs/cli/plugins/signing.html
 
-      Terraform has created a lock file .terraform.lock.hcl to record the provider
-      selections it made above. Include this file in your version control repository
-      so that Terraform can guarantee to make the same selections by default when
-      you run "terraform init" in the future.
+    Terraform has created a lock file .terraform.lock.hcl to record the provider
+    selections it made above. Include this file in your version control repository
+    so that Terraform can guarantee to make the same selections by default when
+    you run "terraform init" in the future.
 
 
-      Warning: Interpolation-only expressions are deprecated
+    Warning: Interpolation-only expressions are deprecated
 
-      on main.tf line 15, in provider "aci":
-      15:   username = "${var.apic_username}"
+    on main.tf line 15, in provider "aci":
+    15:   username = "${var.apic_username}"
 
-      Terraform 0.11 and earlier required all non-constant expressions to be
-      provided via interpolation syntax, but this pattern is now deprecated. To
-      silence this warning, remove the "${ sequence from the start and the }"
-      sequence from the end of this expression, leaving just the inner expression.
+    Terraform 0.11 and earlier required all non-constant expressions to be
+    provided via interpolation syntax, but this pattern is now deprecated. To
+    silence this warning, remove the "${ sequence from the start and the }"
+    sequence from the end of this expression, leaving just the inner expression.
 
-      Template interpolation syntax is still used to construct strings from
-      expressions when the template includes multiple interpolation sequences or a
-      mixture of literal strings and interpolations. This deprecation applies only
-      to templates that consist entirely of a single interpolation sequence.
+    Template interpolation syntax is still used to construct strings from
+    expressions when the template includes multiple interpolation sequences or a
+    mixture of literal strings and interpolations. This deprecation applies only
+    to templates that consist entirely of a single interpolation sequence.
 
-      (and 7 more similar warnings elsewhere)
+    (and 7 more similar warnings elsewhere)
 
-      Terraform has been successfully initialized!
+    Terraform has been successfully initialized!
 
-      You may now begin working with Terraform. Try running "terraform plan" to see
-      any changes that are required for your infrastructure. All Terraform commands
-      should now work.
+    You may now begin working with Terraform. Try running "terraform plan" to see
+    any changes that are required for your infrastructure. All Terraform commands
+    should now work.
 
-      If you ever set or change modules or backend configuration for Terraform,
-      rerun this command to reinitialize your working directory. If you forget, other
-      commands will detect it and remind you to do so if necessary.
-    ```
-  </details>
+    If you ever set or change modules or backend configuration for Terraform,
+    rerun this command to reinitialize your working directory. If you forget, other
+    commands will detect it and remind you to do so if necessary.
+  ```
+</details>
   
 - Perform a dry run of your Terraform configuration using the `plan` command. You should see resources that will be created. 
 
@@ -815,7 +815,264 @@ The names of the files do not matter so long as they end in `.tf`. In our exampl
 
 - Verify in the ACI GUI in the `Tenants` tab that your new tenant has been created and within the tenant a new application profile has been created. **Note that the ACI configuration has remained the same, we've simply split the Terraform configuration into separate files** 
 
-## 1c. Variables and Dependencies
+- Cleanup your ACI tenant and all objects within that tenant.
+
+`terraform destroy`
+
+
+## 1c. More on Variables and Dependencies
+
+
+We've already seen some variables used to store the URL, username, password, and ACI tenant name. We also have other options to store data, such as **Terraform Local Values**
+
+> Terraform locals are named values that you can refer to in your configuration. You can use local values to simplify your Terraform configuration and avoid repetition. Local values (locals) can also help you write more readable configuration by using meaningful names rather than hard-coding values.
+
+https://learn.hashicorp.com/tutorials/terraform/locals
+
+- Before we continue let's reduce the amount of input we need to provide by creating environmental variables for our tenant name and password
+
+- `export TF_VAR_aci_tenant=<your username here>`
+
+- `export TF_VAR_apic_password=ciscopsdt`
+
+- Navigate to the next lesson
+
+`cd hands-on-lab-terraform/lesson_01/variables_and_dependencies/`
+
+- Open the `variables.tf` file and view the new local values we have. 
+
+Since our EPGs have a number of common properties we will store those in a local variable. If we need to change one in the future we only have to change it in this one place and all resources using the local variable will be updated.
+
+- Open the `aci.tf` file and have a look at the `resource "aci_application_epg"`. See how we can reference the local variables with `local.`. For example, `flood_on_encap = local.flood_on_encap`
+
+- Initialise Terraform - This will download the required Terraform providers  
+
+`terraform init`  
+
+- Push the configuration to the ACI fabric using the `apply` command  
+
+`terraform apply --auto-approve`  
+
+<details>
+  <summary>Click to see expected output</summary>
+  
+  ```
+    aci_tenant.aci_tenant: Creating...
+    aci_tenant.aci_tenant: Creation complete after 1s [id=uni/tn-conmurphy]
+    aci_application_profile.myWebsite: Creating...
+    aci_bridge_domain.bd_for_subnet: Creating...
+    aci_application_profile.myWebsite: Creation complete after 0s [id=uni/tn-conmurphy/ap-my_website]
+    aci_application_epg.web: Creating...
+    aci_application_epg.db: Creating...
+    aci_bridge_domain.bd_for_subnet: Creation complete after 2s [id=uni/tn-conmurphy/BD-bd_for_subnet]
+    aci_subnet.demosubnet: Creating...
+    aci_application_epg.web: Creation complete after 3s [id=uni/tn-conmurphy/ap-my_website/epg-web]
+    aci_subnet.demosubnet: Creation complete after 1s [id=uni/tn-conmurphy/BD-bd_for_subnet/subnet-[172.16.1.1/24]]
+    aci_application_epg.db: Creation complete after 3s [id=uni/tn-conmurphy/ap-my_website/epg-db]
+
+    Warning: Interpolation-only expressions are deprecated
+
+      on aci.tf line 7, in resource "aci_bridge_domain" "bd_for_subnet":
+      7:   tenant_dn   = "${aci_tenant.aci_tenant.id}"
+
+    Terraform 0.11 and earlier required all non-constant expressions to be
+    provided via interpolation syntax, but this pattern is now deprecated. To
+    silence this warning, remove the "${ sequence from the start and the }"
+    sequence from the end of this expression, leaving just the inner expression.
+
+    Template interpolation syntax is still used to construct strings from
+    expressions when the template includes multiple interpolation sequences or a
+    mixture of literal strings and interpolations. This deprecation applies only
+    to templates that consist entirely of a single interpolation sequence.
+
+    (and 4 more similar warnings elsewhere)
+
+
+    Apply complete! Resources: 6 added, 0 changed, 0 destroyed.
+  ```
+</details>
+
+- Open the `variables.tf` file and modified the  `local.flood_on_encap` variable from `disabled` to `enabled`
+
+- Run a plan and look at the results
+
+`terraform plan`
+
+<details>
+  <summary>Click to see expected output</summary>
+  
+  ```
+    aci_tenant.aci_tenant: Refreshing state... [id=uni/tn-conmurphy]
+    aci_application_profile.myWebsite: Refreshing state... [id=uni/tn-conmurphy/ap-my_website]
+    aci_bridge_domain.bd_for_subnet: Refreshing state... [id=uni/tn-conmurphy/BD-bd_for_subnet]
+    aci_application_epg.web: Refreshing state... [id=uni/tn-conmurphy/ap-my_website/epg-web]
+    aci_application_epg.db: Refreshing state... [id=uni/tn-conmurphy/ap-my_website/epg-db]
+    aci_subnet.demosubnet: Refreshing state... [id=uni/tn-conmurphy/BD-bd_for_subnet/subnet-[172.16.1.1/24]]
+
+    An execution plan has been generated and is shown below.
+    Resource actions are indicated with the following symbols:
+      ~ update in-place
+
+    Terraform will perform the following actions:
+
+      # aci_application_epg.db will be updated in-place
+      ~ resource "aci_application_epg" "db" {
+          ~ flood_on_encap               = "disabled" -> "enabled"
+          + fwd_ctrl                     = "none"
+            id                           = "uni/tn-conmurphy/ap-my_website/epg-db"
+            name                         = "db"
+            # (21 unchanged attributes hidden)
+        }
+
+      # aci_application_epg.web will be updated in-place
+      ~ resource "aci_application_epg" "web" {
+          ~ flood_on_encap               = "disabled" -> "enabled"
+          + fwd_ctrl                     = "none"
+            id                           = "uni/tn-conmurphy/ap-my_website/epg-web"
+            name                         = "web"
+            # (21 unchanged attributes hidden)
+        }
+
+    Plan: 0 to add, 2 to change, 0 to destroy.
+
+    Warning: Interpolation-only expressions are deprecated
+
+      on aci.tf line 7, in resource "aci_bridge_domain" "bd_for_subnet":
+      7:   tenant_dn   = "${aci_tenant.aci_tenant.id}"
+
+    Terraform 0.11 and earlier required all non-constant expressions to be
+    provided via interpolation syntax, but this pattern is now deprecated. To
+    silence this warning, remove the "${ sequence from the start and the }"
+    sequence from the end of this expression, leaving just the inner expression.
+
+    Template interpolation syntax is still used to construct strings from
+    expressions when the template includes multiple interpolation sequences or a
+    mixture of literal strings and interpolations. This deprecation applies only
+    to templates that consist entirely of a single interpolation sequence.
+
+    (and 4 more similar warnings elsewhere)
+
+
+    ------------------------------------------------------------------------
+
+    Note: You didn't specify an "-out" parameter to save this plan, so Terraform
+    can't guarantee that exactly these actions will be performed if
+    "terraform apply" is subsequently run.
+  ```
+</details>
+
+As you can see, we have updated the variable in one location but the two EPGs using this variable will automatically be updated. This becomes very useful when we are working with large quantities of resources that have common properties.
+
+**Output Values**
+Terraform can also return and print values after a plan has been applied. This is through the use of the output value. This feature is useful when you start to use modules within Terraform.
+
+Open the `variables.tf` file and after the `locals` block paste the following.
+
+```
+output "application_profile_id" {
+  value = aci_application_profile.myWebsite.id
+}
+```
+
+<details>
+   <summary>Click to show entire variables.tf file</summary>
+
+  ```
+    variable "apic_url" {}
+    variable "apic_username" {}
+    variable "apic_password" {}
+    variable "aci_tenant" {}
+
+    locals {
+        flood_on_encap    = "enabled"
+        fwd_ctrl          = "none"
+        has_mcast_source  = "no"
+        match_t           = "AtleastOne"
+        name_alias        = "web"
+        pc_enf_pref       = "unenforced"
+        pref_gr_memb      = "exclude"
+        prio              = "unspecified"
+        shutdown          = "no"
+    }
+
+    output "application_profile_id" {
+      value = aci_application_profile.myWebsite.id
+    }
+  ```
+
+</details>
+
+- Re-run the apply command 
+
+`terraform apply --auto-approve`
+
+<details>
+  <summary>Click to see expected output</summary>
+  
+  ```
+    aci_tenant.aci_tenant: Refreshing state... [id=uni/tn-conmurphy]
+    aci_application_profile.myWebsite: Refreshing state... [id=uni/tn-conmurphy/ap-my_website]
+    aci_bridge_domain.bd_for_subnet: Refreshing state... [id=uni/tn-conmurphy/BD-bd_for_subnet]
+    aci_application_epg.web: Refreshing state... [id=uni/tn-conmurphy/ap-my_website/epg-web]
+    aci_application_epg.db: Refreshing state... [id=uni/tn-conmurphy/ap-my_website/epg-db]
+    aci_subnet.demosubnet: Refreshing state... [id=uni/tn-conmurphy/BD-bd_for_subnet/subnet-[172.16.1.1/24]]
+    aci_application_epg.db: Modifying... [id=uni/tn-conmurphy/ap-my_website/epg-db]
+    aci_application_epg.web: Modifying... [id=uni/tn-conmurphy/ap-my_website/epg-web]
+    aci_application_epg.web: Modifications complete after 1s [id=uni/tn-conmurphy/ap-my_website/epg-web]
+    aci_application_epg.db: Modifications complete after 1s [id=uni/tn-conmurphy/ap-my_website/epg-db]
+
+    Warning: Interpolation-only expressions are deprecated
+
+      on aci.tf line 7, in resource "aci_bridge_domain" "bd_for_subnet":
+      7:   tenant_dn   = "${aci_tenant.aci_tenant.id}"
+
+    Terraform 0.11 and earlier required all non-constant expressions to be
+    provided via interpolation syntax, but this pattern is now deprecated. To
+    silence this warning, remove the "${ sequence from the start and the }"
+    sequence from the end of this expression, leaving just the inner expression.
+
+    Template interpolation syntax is still used to construct strings from
+    expressions when the template includes multiple interpolation sequences or a
+    mixture of literal strings and interpolations. This deprecation applies only
+    to templates that consist entirely of a single interpolation sequence.
+
+    (and 4 more similar warnings elsewhere)
+
+
+    Apply complete! Resources: 0 added, 2 changed, 0 destroyed.
+
+    Outputs:
+
+    application_profile_id = "uni/tn-conmurphy/ap-my_website"
+  ```
+</details>
+
+You should see right at the very end an Output Value with the ID of your application profile.
+
+**Dependencies**
+
+ACI, just like many other products is built using many different objects. These object often relate to each other in some way. For example, an EPG is contained within an Application Profile (AP), and an AP lives in a Tenant.
+
+We can see these relationships in our ACI configuration.
+
+- Open the `aci.tf` file and look at the resource `resource "aci_application_epg" "web"`
+
+To tell ACI which AP this EPG belongs to we can reference the AP resource. 
+
+- Look at the next line, `application_profile_dn  = "${aci_application_profile.myWebsite.id}"`
+
+This means that the ID or distinguished name of the application profile to which this EPG belongs is the ID of an application profile called `myWebsite`. 
+
+- In the `aci.tf` file locate the `resource "aci_application_profile" "myWebsite" ` which should be right about the EPG.
+
+You can also see that the application profile is linked to the Tenant ID in the same way.
+
+**Important Notes:** 
+- Terraform will automatically link these resources together when a plan is applied. There is an inherent dependency because one resource is referencing another. That means a tenant will be created before an AP, and an AP created before and EPG.
+- In the case where you don't have a link between two resources but need to ensure one resource is created before another, you can use `depends_on`
+
+  https://www.terraform.io/docs/language/meta-arguments/depends_on.html
+
 
 ## 2. Understanding Terraform State
 
@@ -833,12 +1090,6 @@ This is performed through the use of a Statefile.
   https://www.terraform.io/docs/language/state/index.html
 
 </details>
-
-- Before we continue let's reduce the amount of input we need to provide by creating environmental variables for our tenant name and password
-
-- `export TF_VAR_aci_tenant=<your username here>`
-
-- `export TF_VAR_apic_password=ciscopsdt`
 
 - Run another `plan` and confirm that no new objects are created.
 
