@@ -1,4 +1,4 @@
-# 1. Getting familiar with Terraform commands and files
+## 1a. Getting familiar with Terraform commands and files
 - Clone the following Git repository
 
 `git clone `  
@@ -300,6 +300,8 @@ Apply complete! Resources: 6 added, 0 changed, 0 destroyed.
 
  - You will need to enter the ACI URL, username, and password. Use your **username** for the tenant name
 
+ - You will also need to type `yes` when asked if you really want to destroy all resources? 
+
 
   ```
   var.aci_tenant
@@ -460,7 +462,7 @@ Apply complete! Resources: 6 added, 0 changed, 0 destroyed.
   ```
 </details>
 
-
+### Summary
 <details>
   <summary>Click to read the lesson summary</summary>
 
@@ -469,4 +471,365 @@ Apply complete! Resources: 6 added, 0 changed, 0 destroyed.
    If you look through the `main.tf` file you will see all the configuration necessary to build your ACI Tenant, Application Profile, EPGs, and Bridge Domain.
 </details>
 
+## 1b. Config structure and variables
+
+- Navigate to the next lesson
+
+`cd hands-on-lab-terraform/lesson_01/multiple_files/`
+
+You will notice that instead of a single `main.tf` file we now have multiple `.tf` files. By default Terraform will read all `.tf` files in the directory from which the Terraform command was ran. 
+
+The names of the files do not matter so long as they end in `.tf`. In our example we have split the files into their specific purposes. 
+
+<details>
+  <summary>Click to get more details on each file</summary>
+
+  #### `versions.tf`
+
+  ```
+    terraform {
+      required_providers {
+        aci = {
+          source = "ciscodevnet/aci"
+          version = "0.4.1"
+        }
+      }
+      required_version = ">= 0.13.4"
+    }
+  ```
+  We define the providers and required versions as well as the version of Terraform that we will require
+
+  #### `providers.tf`
+
+  ```
+    provider "aci" {
+      username = "${var.apic_username}"
+      password = "${var.apic_password}"
+      url      = "${var.apic_url}"
+      insecure = true
+    }
+  ```
+  This points Terraform to our ACI provider. It references the variables we will receive from the user input
+
+  #### `variables.tf`
+  ```
+    variable "aci_tenant" {}
+    variable "apic_url" {}
+    variable "apic_username" {}
+    variable "apic_password" {}
+  ```
+  This lets Terraform know that we expect four variables. We could also define a default value if needed.
+
+  ```
+    variable "aci_tenant" {}
+    variable "apic_url" {
+      default = "https://sandboxapicdc.cisco.com"
+    }
+    variable "apic_username" {}
+    variable "apic_password" {}
+  ```
+
+  #### `terraform.tfvars`
+  ```
+    apic_url = "https://sandboxapicdc.cisco.com"
+    apic_username = "admin"
+  ```
+  We need to initialise variables within Terraform. This is the previous step. If we don't provide any default values Terraform will ask for this through the input prompt when we run the `terraform plan` and `terraform apply` commands. This was the behaviour we saw in the previous lesson.
+
+  If we want to define values for the Terraform variables, but want to keep them out of the code, we can add them to a separate file call `terraform.tfvars`. An example of this may be credentials or specific environment configuration that we don't want committed to our version control system.
+
+  Alternatively you can define an environmental variable using the prefix TF_VAR. For example, `TF_VAR_apic_url` 
+
+  https://www.terraform.io/docs/cli/config/environment-variables.html
+
+  #### `aci.tf`
+
+  We've included all our ACI Terraform configuration in this file. This works for our small example however it can quickly grow. Later on we will look at examples how to break your infrastructure configuration into smaller, more manageable pieces. 
+
+</details>
+
+- Verify that no tenant exists with your Cisco username  
+
+- Initialise Terraform - This will download the required Terraform providers  
+
+`terraform init`  
+
+<details>
+  <summary>Click to see expected output</summary>
+  
+  ```
+  Initializing the backend...
+
+    Initializing provider plugins...
+    - Finding ciscodevnet/aci versions matching "0.4.1"...
+    - Installing ciscodevnet/aci v0.4.1...
+    - Installed ciscodevnet/aci v0.4.1 (signed by a HashiCorp partner, key ID 433649E2C56309DE)
+
+    Partner and community providers are signed by their developers.
+    If you'd like to know more about provider signing, you can read about it here:
+    https://www.terraform.io/docs/cli/plugins/signing.html
+
+    Terraform has created a lock file .terraform.lock.hcl to record the provider
+    selections it made above. Include this file in your version control repository
+    so that Terraform can guarantee to make the same selections by default when
+    you run "terraform init" in the future.
+
+
+    Warning: Interpolation-only expressions are deprecated
+
+    on main.tf line 15, in provider "aci":
+    15:   username = "${var.apic_username}"
+
+    Terraform 0.11 and earlier required all non-constant expressions to be
+    provided via interpolation syntax, but this pattern is now deprecated. To
+    silence this warning, remove the "${ sequence from the start and the }"
+    sequence from the end of this expression, leaving just the inner expression.
+
+    Template interpolation syntax is still used to construct strings from
+    expressions when the template includes multiple interpolation sequences or a
+    mixture of literal strings and interpolations. This deprecation applies only
+    to templates that consist entirely of a single interpolation sequence.
+
+    (and 7 more similar warnings elsewhere)
+
+    Terraform has been successfully initialized!
+
+    You may now begin working with Terraform. Try running "terraform plan" to see
+    any changes that are required for your infrastructure. All Terraform commands
+    should now work.
+
+    If you ever set or change modules or backend configuration for Terraform,
+    rerun this command to reinitialize your working directory. If you forget, other
+    commands will detect it and remind you to do so if necessary.
+  ```
+</details>
+
+- Perform a dry run of your Terraform configuration using the `plan` command. You should see resources that will be created. 
+
+`terraform plan`  
+
+  - Note that this time you are only asked for your tenant name and ACI password. This is because the `terraform.tfvars` file contains the values for the `apic_url` and `apic_username`. Use your **username** for the tenant name
+
+  ```
+  var.aci_tenant
+  Enter a value: conmurphy
+
+  var.apic_password
+  Enter a value: ciscopsdt
+  ```
+
+<details>
+  <summary>Click to see expected output</summary>
+  
+  ```
+    An execution plan has been generated and is shown below.
+    Resource actions are indicated with the following symbols:
+      + create
+
+    Terraform will perform the following actions:
+
+      # aci_application_epg.db will be created
+      + resource "aci_application_epg" "db" {
+          + annotation             = "orchestrator:terraform"
+          + application_profile_dn = (known after apply)
+          + description            = "this is the database epg created by terraform"
+          + exception_tag          = (known after apply)
+          + flood_on_encap         = "disabled"
+          + fwd_ctrl               = "none"
+          + has_mcast_source       = "no"
+          + id                     = (known after apply)
+          + is_attr_based_epg      = (known after apply)
+          + match_t                = "AtleastOne"
+          + name                   = "db"
+          + name_alias             = "db"
+          + pc_enf_pref            = "unenforced"
+          + pref_gr_memb           = "exclude"
+          + prio                   = "unspecified"
+          + shutdown               = "no"
+        }
+
+      # aci_application_epg.web will be created
+      + resource "aci_application_epg" "web" {
+          + annotation             = "orchestrator:terraform"
+          + application_profile_dn = (known after apply)
+          + description            = "this is the web epg created by terraform"
+          + exception_tag          = (known after apply)
+          + flood_on_encap         = "disabled"
+          + fwd_ctrl               = "none"
+          + has_mcast_source       = "no"
+          + id                     = (known after apply)
+          + is_attr_based_epg      = (known after apply)
+          + match_t                = "AtleastOne"
+          + name                   = "web"
+          + name_alias             = "web"
+          + pc_enf_pref            = "unenforced"
+          + pref_gr_memb           = "exclude"
+          + prio                   = "unspecified"
+          + shutdown               = "no"
+        }
+
+      # aci_application_profile.myWebsite will be created
+      + resource "aci_application_profile" "myWebsite" {
+          + annotation  = "orchestrator:terraform"
+          + description = (known after apply)
+          + id          = (known after apply)
+          + name        = "my_website"
+          + name_alias  = (known after apply)
+          + prio        = (known after apply)
+          + tenant_dn   = (known after apply)
+        }
+
+      # aci_bridge_domain.bd_for_subnet will be created
+      + resource "aci_bridge_domain" "bd_for_subnet" {
+          + annotation                  = "orchestrator:terraform"
+          + arp_flood                   = (known after apply)
+          + bridge_domain_type          = (known after apply)
+          + description                 = "This bridge domain is created by the Terraform ACI provider"
+          + ep_clear                    = (known after apply)
+          + ep_move_detect_mode         = (known after apply)
+          + host_based_routing          = (known after apply)
+          + id                          = (known after apply)
+          + intersite_bum_traffic_allow = (known after apply)
+          + intersite_l2_stretch        = (known after apply)
+          + ip_learning                 = (known after apply)
+          + ipv6_mcast_allow            = (known after apply)
+          + limit_ip_learn_to_subnets   = (known after apply)
+          + ll_addr                     = (known after apply)
+          + mac                         = (known after apply)
+          + mcast_allow                 = (known after apply)
+          + multi_dst_pkt_act           = (known after apply)
+          + name                        = "bd_for_subnet"
+          + name_alias                  = (known after apply)
+          + optimize_wan_bandwidth      = (known after apply)
+          + tenant_dn                   = (known after apply)
+          + unicast_route               = (known after apply)
+          + unk_mac_ucast_act           = (known after apply)
+          + unk_mcast_act               = (known after apply)
+          + v6unk_mcast_act             = (known after apply)
+          + vmac                        = (known after apply)
+        }
+
+      # aci_subnet.demosubnet will be created
+      + resource "aci_subnet" "demosubnet" {
+          + annotation  = "orchestrator:terraform"
+          + ctrl        = (known after apply)
+          + description = "This subject is created by Terraform"
+          + id          = (known after apply)
+          + ip          = "172.16.1.1/24"
+          + name_alias  = (known after apply)
+          + parent_dn   = (known after apply)
+          + preferred   = (known after apply)
+          + scope       = "private"
+          + virtual     = (known after apply)
+        }
+
+      # aci_tenant.aci_tenant will be created
+      + resource "aci_tenant" "aci_tenant" {
+          + annotation  = "orchestrator:terraform"
+          + description = (known after apply)
+          + id          = (known after apply)
+          + name        = "conmurphy"
+          + name_alias  = (known after apply)
+        }
+
+    Plan: 6 to add, 0 to change, 0 to destroy.
+
+    Warning: Interpolation-only expressions are deprecated
+
+      on aci.tf line 7, in resource "aci_bridge_domain" "bd_for_subnet":
+      7:   tenant_dn   = "${aci_tenant.aci_tenant.id}"
+
+    Terraform 0.11 and earlier required all non-constant expressions to be
+    provided via interpolation syntax, but this pattern is now deprecated. To
+    silence this warning, remove the "${ sequence from the start and the }"
+    sequence from the end of this expression, leaving just the inner expression.
+
+    Template interpolation syntax is still used to construct strings from
+    expressions when the template includes multiple interpolation sequences or a
+    mixture of literal strings and interpolations. This deprecation applies only
+    to templates that consist entirely of a single interpolation sequence.
+
+    (and 7 more similar warnings elsewhere)
+
+
+    ------------------------------------------------------------------------
+
+    Note: You didn't specify an "-out" parameter to save this plan, so Terraform
+    can't guarantee that exactly these actions will be performed if
+    "terraform apply" is subsequently run.
+  ```
+</details>
+
+- Push the configuration to the ACI fabric using the `apply` command  
+
+`terraform apply --auto-approve`  
+
+  - Note that this time you are only asked for your tenant name and ACI password. This is because the `terraform.tfvars` file contains the values for the `apic_url` and `apic_username`. Use your **username** for the tenant name
+
+  ```
+  var.aci_tenant
+  Enter a value: conmurphy
+
+  var.apic_password
+  Enter a value: ciscopsdt
+  ```
+  
+<details>
+  <summary>Click to see expected output</summary>
+  
+  ```
+    aci_tenant.aci_tenant: Creating...
+    aci_tenant.aci_tenant: Creation complete after 1s [id=uni/tn-conmurphy]
+    aci_application_profile.myWebsite: Creating...
+    aci_bridge_domain.bd_for_subnet: Creating...
+    aci_application_profile.myWebsite: Creation complete after 0s [id=uni/tn-conmurphy/ap-my_website]
+    aci_application_epg.web: Creating...
+    aci_application_epg.db: Creating...
+    aci_bridge_domain.bd_for_subnet: Creation complete after 3s [id=uni/tn-conmurphy/BD-bd_for_subnet]
+    aci_subnet.demosubnet: Creating...
+    aci_application_epg.web: Creation complete after 4s [id=uni/tn-conmurphy/ap-my_website/epg-web]
+    aci_subnet.demosubnet: Creation complete after 1s [id=uni/tn-conmurphy/BD-bd_for_subnet/subnet-[172.16.1.1/24]]
+    aci_application_epg.db: Creation complete after 4s [id=uni/tn-conmurphy/ap-my_website/epg-db]
+
+    Warning: Interpolation-only expressions are deprecated
+
+      on aci.tf line 7, in resource "aci_bridge_domain" "bd_for_subnet":
+      7:   tenant_dn   = "${aci_tenant.aci_tenant.id}"
+
+    Terraform 0.11 and earlier required all non-constant expressions to be
+    provided via interpolation syntax, but this pattern is now deprecated. To
+    silence this warning, remove the "${ sequence from the start and the }"
+    sequence from the end of this expression, leaving just the inner expression.
+
+    Template interpolation syntax is still used to construct strings from
+    expressions when the template includes multiple interpolation sequences or a
+    mixture of literal strings and interpolations. This deprecation applies only
+    to templates that consist entirely of a single interpolation sequence.
+
+    (and 7 more similar warnings elsewhere)
+
+
+    Apply complete! Resources: 6 added, 0 changed, 0 destroyed.
+  ```
+</details>
+
+- Verify in the ACI GUI in the `Tenants` tab that your new tenant has been created and within the tenant a new application profile has been created. **Note that the ACI configuration has remained the same, we've simply split the Terraform configuration into separate files** 
+
+
+## Understanding Terraform State
+
+So far we've been configuring our ACI fabric with Terraform however how is the configuration tracked? 
+
+This is performed through the use of a Statefile. 
+
+<details>
+   <summary>Click to read more about Terraform state</summary>
+
+    > Terraform must store state about your managed infrastructure and configuration. This state is used by Terraform to map real world resources to your configuration, keep track of metadata, and to improve performance for large infrastructures.
+
+    > This state is stored by default in a local file named "terraform.tfstate", but it can also be stored remotely, which works better in a team environment.
+
+  https://www.terraform.io/docs/language/state/index.html
+
+</details>
 
