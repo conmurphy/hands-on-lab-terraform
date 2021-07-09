@@ -913,11 +913,11 @@ This is performed through the use of a Statefile.
 
 **IMPORTANT POINT:** Terraform works by looking at the difference between the configuration in your `.tf` files and the configuration it knows about in the `terraform.tfstate` file. Based on this comparison it determines what operation needs to take place (Create, Update, or Delete a resource).
 
-What happens if we remove the state file?
+### What happens if we remove the state file?
 
 - Rename the statefile so Terraform can't find it
 
-- `mv terraform.tfstate terraform.tfstate_hidden`
+`mv terraform.tfstate terraform.tfstate_hidden`
 
 - Run another `plan` and notice that Terraform is planning to create new ACI Tenant, APN, EPG, and BD objects. 
 
@@ -1128,7 +1128,7 @@ You'll also note that you should now have a new `terraform.tfstate` file alongsi
 ### What happens if delete the Terraform ACI config?
 - Rename the ACI configuration file so Terraform can't find it
 
-- `mv aci.tf aci.tf_hidden`
+`mv aci.tf aci.tf_hidden`
 
 - Run another `plan` and notice that Terraform is planning to delete all of your ACI configuration!
 
