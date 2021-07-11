@@ -957,6 +957,7 @@ Since our EPGs have a number of common properties we will store those in a local
 As you can see, we have updated the variable in one location but the two EPGs using this variable will automatically be updated. This becomes very useful when we are working with large quantities of resources that have common properties.
 
 **Output Values**
+
 Terraform can also return and print values after a plan has been applied. This is through the use of the output value. This feature is useful when you start to use modules within Terraform.
 
 Open the `variables.tf` file and after the `locals` block paste the following.
