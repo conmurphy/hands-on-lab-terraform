@@ -1057,7 +1057,7 @@ To tell ACI which AP this EPG belongs to we can reference the AP resource.
 
 This means that the ID or distinguished name of the application profile to which this EPG belongs is the ID of an application profile called `myWebsite`. 
 
-- In the `aci.tf` file locate the `resource "aci_application_profile" "myWebsite" ` which should be right about the EPG.
+- In the `aci.tf` file locate the `resource "aci_application_profile" "myWebsite" ` which should be right above the EPG.
 
 You can also see that the application profile is linked to the Tenant ID in the same way.
 
