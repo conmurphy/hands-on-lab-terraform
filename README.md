@@ -822,6 +822,8 @@ https://learn.hashicorp.com/tutorials/terraform/locals
 
 - Before we continue let's reduce the amount of input we need to provide by creating environmental variables for our tenant name and password
 
+**IMPORTANT NOTE: YOU NEED TO INSERT YOUR USERNAME**
+
 - `export TF_VAR_aci_tenant=<your username here>`
 
 - `export TF_VAR_apic_password=ciscopsdt`
