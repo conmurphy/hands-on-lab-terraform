@@ -1740,9 +1740,405 @@ Notice that we are specifying the name of a tenant, `common`. Terraform will not
 - Expand the `Application Profiles` and verify that a profile with your username exists
 
 
-## Importing
+## 5. Importing existing configuratiion
 
-## Modules
+- Navigate to the folder containing the next lesson
+
+`cd hands-on-lab-terraform/lesson_05/`  
+
+- Initialise Terraform  
+
+`terraform init`
+
+- Apply the configuration to setup the ACI fabric
+
+`terraform apply --auto-approve`
+
+<details>
+  <summary>Click to see expected output</summary>
+  
+  ```
+    aci_tenant.aci_tenant: Creating...
+    aci_tenant.aci_tenant: Creation complete after 1s [id=uni/tn-conmurphy]
+    aci_application_profile.myWebsite: Creating...
+    aci_bridge_domain.bd_for_subnet: Creating...
+    aci_application_profile.myWebsite: Creation complete after 0s [id=uni/tn-conmurphy/ap-my_website]
+    aci_application_epg.db: Creating...
+    aci_application_epg.web: Creating...
+    aci_bridge_domain.bd_for_subnet: Creation complete after 1s [id=uni/tn-conmurphy/BD-bd_for_subnet]
+    aci_subnet.demosubnet: Creating...
+    aci_application_epg.web: Creation complete after 2s [id=uni/tn-conmurphy/ap-my_website/epg-web]
+    aci_application_epg.db: Creation complete after 2s [id=uni/tn-conmurphy/ap-my_website/epg-db]
+    aci_subnet.demosubnet: Creation complete after 1s [id=uni/tn-conmurphy/BD-bd_for_subnet/subnet-[172.16.1.1/24]]
+
+    Warning: Interpolation-only expressions are deprecated
+
+      on aci.tf line 7, in resource "aci_bridge_domain" "bd_for_subnet":
+      7:   tenant_dn   = "${aci_tenant.aci_tenant.id}"
+
+    Terraform 0.11 and earlier required all non-constant expressions to be
+    provided via interpolation syntax, but this pattern is now deprecated. To
+    silence this warning, remove the "${ sequence from the start and the }"
+    sequence from the end of this expression, leaving just the inner expression.
+
+    Template interpolation syntax is still used to construct strings from
+    expressions when the template includes multiple interpolation sequences or a
+    mixture of literal strings and interpolations. This deprecation applies only
+    to templates that consist entirely of a single interpolation sequence.
+
+    (and 4 more similar warnings elsewhere)
+
+
+    Apply complete! Resources: 6 added, 0 changed, 0 destroyed.
+
+    Outputs:
+
+    application_profile_id = "uni/tn-conmurphy/ap-my_website"      
+  ```
+</details>
+
+- Remove the Terraform state fiile
+
+`mv terraform.tfstate terraform.tfstate_hidden`
+
+- Re-run the Terraform plan to see what will happen.
+
+`terraform plan`
+
+<details>
+  <summary>Click to see expected output</summary>
+  
+  ```
+    An execution plan has been generated and is shown below.
+    Resource actions are indicated with the following symbols:
+      + create
+
+    Terraform will perform the following actions:
+
+      # aci_application_epg.db will be created
+      + resource "aci_application_epg" "db" {
+          + annotation             = "orchestrator:terraform"
+          + application_profile_dn = (known after apply)
+          + description            = "this is the database epg created by terraform"
+          + exception_tag          = (known after apply)
+          + flood_on_encap         = "enabled"
+          + fwd_ctrl               = "none"
+          + has_mcast_source       = "no"
+          + id                     = (known after apply)
+          + is_attr_based_epg      = (known after apply)
+          + match_t                = "AtleastOne"
+          + name                   = "db"
+          + name_alias             = "db"
+          + pc_enf_pref            = "unenforced"
+          + pref_gr_memb           = "exclude"
+          + prio                   = "unspecified"
+          + shutdown               = "no"
+        }
+
+      # aci_application_epg.web will be created
+      + resource "aci_application_epg" "web" {
+          + annotation             = "orchestrator:terraform"
+          + application_profile_dn = (known after apply)
+          + description            = "this is the web epg created by terraform"
+          + exception_tag          = (known after apply)
+          + flood_on_encap         = "enabled"
+          + fwd_ctrl               = "none"
+          + has_mcast_source       = "no"
+          + id                     = (known after apply)
+          + is_attr_based_epg      = (known after apply)
+          + match_t                = "AtleastOne"
+          + name                   = "web"
+          + name_alias             = "web"
+          + pc_enf_pref            = "unenforced"
+          + pref_gr_memb           = "exclude"
+          + prio                   = "unspecified"
+          + shutdown               = "no"
+        }
+
+      # aci_application_profile.myWebsite will be created
+      + resource "aci_application_profile" "myWebsite" {
+          + annotation  = "orchestrator:terraform"
+          + description = (known after apply)
+          + id          = (known after apply)
+          + name        = "my_website"
+          + name_alias  = (known after apply)
+          + prio        = (known after apply)
+          + tenant_dn   = (known after apply)
+        }
+
+      # aci_bridge_domain.bd_for_subnet will be created
+      + resource "aci_bridge_domain" "bd_for_subnet" {
+          + annotation                  = "orchestrator:terraform"
+          + arp_flood                   = (known after apply)
+          + bridge_domain_type          = (known after apply)
+          + description                 = "This bridge domain is created by the Terraform ACI provider"
+          + ep_clear                    = (known after apply)
+          + ep_move_detect_mode         = (known after apply)
+          + host_based_routing          = (known after apply)
+          + id                          = (known after apply)
+          + intersite_bum_traffic_allow = (known after apply)
+          + intersite_l2_stretch        = (known after apply)
+          + ip_learning                 = (known after apply)
+          + ipv6_mcast_allow            = (known after apply)
+          + limit_ip_learn_to_subnets   = (known after apply)
+          + ll_addr                     = (known after apply)
+          + mac                         = (known after apply)
+          + mcast_allow                 = (known after apply)
+          + multi_dst_pkt_act           = (known after apply)
+          + name                        = "bd_for_subnet"
+          + name_alias                  = (known after apply)
+          + optimize_wan_bandwidth      = (known after apply)
+          + tenant_dn                   = (known after apply)
+          + unicast_route               = (known after apply)
+          + unk_mac_ucast_act           = (known after apply)
+          + unk_mcast_act               = (known after apply)
+          + v6unk_mcast_act             = (known after apply)
+          + vmac                        = (known after apply)
+        }
+
+      # aci_subnet.demosubnet will be created
+      + resource "aci_subnet" "demosubnet" {
+          + annotation  = "orchestrator:terraform"
+          + ctrl        = (known after apply)
+          + description = "This subject is created by Terraform"
+          + id          = (known after apply)
+          + ip          = "172.16.1.1/24"
+          + name_alias  = (known after apply)
+          + parent_dn   = (known after apply)
+          + preferred   = (known after apply)
+          + scope       = "private"
+          + virtual     = (known after apply)
+        }
+
+      # aci_tenant.aci_tenant will be created
+      + resource "aci_tenant" "aci_tenant" {
+          + annotation  = "orchestrator:terraform"
+          + description = (known after apply)
+          + id          = (known after apply)
+          + name        = "conmurphy"
+          + name_alias  = (known after apply)
+        }
+
+    Plan: 6 to add, 0 to change, 0 to destroy.
+
+    Changes to Outputs:
+      + application_profile_id = (known after apply)
+
+    Warning: Interpolation-only expressions are deprecated
+
+      on aci.tf line 7, in resource "aci_bridge_domain" "bd_for_subnet":
+      7:   tenant_dn   = "${aci_tenant.aci_tenant.id}"
+
+    Terraform 0.11 and earlier required all non-constant expressions to be
+    provided via interpolation syntax, but this pattern is now deprecated. To
+    silence this warning, remove the "${ sequence from the start and the }"
+    sequence from the end of this expression, leaving just the inner expression.
+
+    Template interpolation syntax is still used to construct strings from
+    expressions when the template includes multiple interpolation sequences or a
+    mixture of literal strings and interpolations. This deprecation applies only
+    to templates that consist entirely of a single interpolation sequence.
+
+    (and 4 more similar warnings elsewhere)
+
+
+    ------------------------------------------------------------------------
+
+    Note: You didn't specify an "-out" parameter to save this plan, so Terraform
+    can't guarantee that exactly these actions will be performed if
+    "terraform apply" is subsequently run.
+  ```
+</details>
+
+You should see the same output as what we've seen before. Since there's no longer a statefile, Terraform tries to recreate the environment. 
+
+In a real world example we might already have our ACI fabric configured (brownfield) and we now want to start using Terraform to manage the configuration.
+
+We can achieve this with `import`
+
+https://www.terraform.io/docs/cli/import/index.html
+
+Terraform import requires the format, `terraform import <address> <id>`. With ACI, the ID is the Distinguished Name of the ACI object.
+
+- Import the existing ACI resources. **IMPORTANT NOTE: `Terraform import` requires your configuration to already exist and only imports the state.**
+
+
+`terraform import aci_tenant.aci_tenant uni/tn-conmurphy`
+
+<details>
+  <summary>Click to see expected output</summary>
+  
+  ```
+    Warning: Interpolation-only expressions are deprecated
+
+      on aci.tf line 7, in resource "aci_bridge_domain" "bd_for_subnet":
+      7:   tenant_dn   = "${aci_tenant.aci_tenant.id}"
+
+    Terraform 0.11 and earlier required all non-constant expressions to be
+    provided via interpolation syntax, but this pattern is now deprecated. To
+    silence this warning, remove the "${ sequence from the start and the }"
+    sequence from the end of this expression, leaving just the inner expression.
+
+    Template interpolation syntax is still used to construct strings from
+    expressions when the template includes multiple interpolation sequences or a
+    mixture of literal strings and interpolations. This deprecation applies only
+    to templates that consist entirely of a single interpolation sequence.
+
+    (and 4 more similar warnings elsewhere)
+
+    aci_tenant.aci_tenant: Importing from ID "uni/tn-conmurphy"...
+    aci_tenant.aci_tenant: Import prepared!
+      Prepared aci_tenant for import
+    aci_tenant.aci_tenant: Refreshing state... [id=uni/tn-conmurphy]
+
+    Import successful!
+
+    The resources that were imported are shown above. These resources are now in
+    your Terraform state and will henceforth be managed by Terraform.
+
+
+    Warning: Interpolation-only expressions are deprecated
+
+      on aci.tf line 7, in resource "aci_bridge_domain" "bd_for_subnet":
+      7:   tenant_dn   = "${aci_tenant.aci_tenant.id}"
+
+    Terraform 0.11 and earlier required all non-constant expressions to be
+    provided via interpolation syntax, but this pattern is now deprecated. To
+    silence this warning, remove the "${ sequence from the start and the }"
+    sequence from the end of this expression, leaving just the inner expression.
+
+    Template interpolation syntax is still used to construct strings from
+    expressions when the template includes multiple interpolation sequences or a
+    mixture of literal strings and interpolations. This deprecation applies only
+    to templates that consist entirely of a single interpolation sequence.
+
+    (and 9 more similar warnings elsewhere)
+  ```
+</details>
+
+`terraform import aci_bridge_domain.bd_for_subnet uni/tn-conmurphy/BD-bd_for_subnet`
+
+`terraform import aci_subnet.demosubnet "uni/tn-conmurphy/BD-bd_for_subnet/subnet-[172.16.1.1/24]"`
+
+`terraform import aci_application_profile.myWebsite uni/tn-conmurphy/ap-my_website`
+
+`terraform import aci_application_epg.web uni/tn-conmurphy/ap-my_website/epg-web`
+
+`terraform import aci_application_epg.db uni/tn-conmurphy/ap-my_website/epg-db`
+
+You should now have all the existing resourcs managed in your statefile. 
+
+- Re-run the plan and apply to finalize the import
+
+`terraform plan`
+
+<details>
+  <summary>Click to see expected output</summary>
+  
+  ```
+    aci_tenant.aci_tenant: Refreshing state... [id=uni/tn-conmurphy]
+    aci_application_profile.myWebsite: Refreshing state... [id=uni/tn-conmurphy/ap-my_website]
+    aci_bridge_domain.bd_for_subnet: Refreshing state... [id=uni/tn-conmurphy/BD-bd_for_subnet]
+    aci_application_epg.web: Refreshing state... [id=uni/tn-conmurphy/ap-my_website/epg-web]
+    aci_application_epg.db: Refreshing state... [id=uni/tn-conmurphy/ap-my_website/epg-db]
+    aci_subnet.demosubnet: Refreshing state... [id=uni/tn-conmurphy/BD-bd_for_subnet/subnet-[172.16.1.1/24]]
+
+    An execution plan has been generated and is shown below.
+    Resource actions are indicated with the following symbols:
+      ~ update in-place
+
+    Terraform will perform the following actions:
+
+      # aci_application_epg.db will be updated in-place
+      ~ resource "aci_application_epg" "db" {
+          + fwd_ctrl                     = "none"
+            id                           = "uni/tn-conmurphy/ap-my_website/epg-db"
+            name                         = "db"
+            # (22 unchanged attributes hidden)
+        }
+
+      # aci_application_epg.web will be updated in-place
+      ~ resource "aci_application_epg" "web" {
+          + fwd_ctrl                     = "none"
+            id                           = "uni/tn-conmurphy/ap-my_website/epg-web"
+            name                         = "web"
+            # (22 unchanged attributes hidden)
+        }
+
+    Plan: 0 to add, 2 to change, 0 to destroy.
+
+    Warning: Interpolation-only expressions are deprecated
+
+      on aci.tf line 7, in resource "aci_bridge_domain" "bd_for_subnet":
+      7:   tenant_dn   = "${aci_tenant.aci_tenant.id}"
+
+    Terraform 0.11 and earlier required all non-constant expressions to be
+    provided via interpolation syntax, but this pattern is now deprecated. To
+    silence this warning, remove the "${ sequence from the start and the }"
+    sequence from the end of this expression, leaving just the inner expression.
+
+    Template interpolation syntax is still used to construct strings from
+    expressions when the template includes multiple interpolation sequences or a
+    mixture of literal strings and interpolations. This deprecation applies only
+    to templates that consist entirely of a single interpolation sequence.
+
+    (and 4 more similar warnings elsewhere)
+
+
+    ------------------------------------------------------------------------
+
+    Note: You didn't specify an "-out" parameter to save this plan, so Terraform
+    can't guarantee that exactly these actions will be performed if
+    "terraform apply" is subsequently run.
+  ```
+</details>
+
+`terraform apply --auto-approve`
+
+<details>
+  <summary>Click to see expected output</summary>
+  
+  ```
+    aci_tenant.aci_tenant: Refreshing state... [id=uni/tn-conmurphy]
+    aci_application_profile.myWebsite: Refreshing state... [id=uni/tn-conmurphy/ap-my_website]
+    aci_bridge_domain.bd_for_subnet: Refreshing state... [id=uni/tn-conmurphy/BD-bd_for_subnet]
+    aci_application_epg.db: Refreshing state... [id=uni/tn-conmurphy/ap-my_website/epg-db]
+    aci_application_epg.web: Refreshing state... [id=uni/tn-conmurphy/ap-my_website/epg-web]
+    aci_subnet.demosubnet: Refreshing state... [id=uni/tn-conmurphy/BD-bd_for_subnet/subnet-[172.16.1.1/24]]
+    aci_application_epg.web: Modifying... [id=uni/tn-conmurphy/ap-my_website/epg-web]
+    aci_application_epg.db: Modifying... [id=uni/tn-conmurphy/ap-my_website/epg-db]
+    aci_application_epg.db: Modifications complete after 3s [id=uni/tn-conmurphy/ap-my_website/epg-db]
+    aci_application_epg.web: Modifications complete after 5s [id=uni/tn-conmurphy/ap-my_website/epg-web]
+
+    Warning: Interpolation-only expressions are deprecated
+
+      on aci.tf line 7, in resource "aci_bridge_domain" "bd_for_subnet":
+      7:   tenant_dn   = "${aci_tenant.aci_tenant.id}"
+
+    Terraform 0.11 and earlier required all non-constant expressions to be
+    provided via interpolation syntax, but this pattern is now deprecated. To
+    silence this warning, remove the "${ sequence from the start and the }"
+    sequence from the end of this expression, leaving just the inner expression.
+
+    Template interpolation syntax is still used to construct strings from
+    expressions when the template includes multiple interpolation sequences or a
+    mixture of literal strings and interpolations. This deprecation applies only
+    to templates that consist entirely of a single interpolation sequence.
+
+    (and 4 more similar warnings elsewhere)
+
+
+    Apply complete! Resources: 0 added, 2 changed, 0 destroyed.
+
+    Outputs:
+
+    application_profile_id = "uni/tn-conmurphy/ap-my_website"
+  ```
+</details>
+
+As you can see by the output, Terraform has successfully imported the configuration and when we re-run the plan, no new resources are created.
+
+## Optional: Modules
 
 ## Optional: Other Useful Terraform Commands
 Here are some further Terraform commands you might find useful when working with the CLI
