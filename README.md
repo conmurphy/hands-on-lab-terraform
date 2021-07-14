@@ -1,7 +1,7 @@
 ## 1. Getting familiar with Terraform commands and files
 - Clone the following Git repository
 
-`git clone `  
+`git clone https://github.com/conmurphy/hands-on-lab-terraform.git`  
 
 - Navigate to the folder containing the first lesson
 
@@ -2659,4 +2659,10 @@ Here are some further Terraform commands you might find useful when working with
 
 
 ## References
+
+https://learn.hashicorp.com/tutorials/terraform/module
+
+https://learn.hashicorp.com/tutorials/terraform/pattern-module-creation?in=terraform/modules
+
+https://www.terraform.io/docs/language/functions/index.html
 
