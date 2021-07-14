@@ -2157,8 +2157,8 @@ This lesson will give you an introduction to how you might structure your Terraf
 
 - Intialise and apply the plan
 
-- `terraform init`
-- `terraform apply --auto-approve`
+`terraform init`
+`terraform apply --auto-approve`
 
 <details>
   <summary>Click to see expected output</summary>
@@ -2227,11 +2227,412 @@ This lesson will give you an introduction to how you might structure your Terraf
 
 - Note how many resources and what types of resources have been created (19 in the expected output). As you should see, there are a mixture of `leaf access policies` and `tenant/application policies`. 
 
-As 
+**Important Note:** As you include more and more Terraform configuration, the time taken to refresh and apply increases. You also increase the size of the failure domain in the event that something goes wrong.
+
+One option to address this issue is to separate your configuration into their own folders.
+
+https://learn.hashicorp.com/tutorials/terraform/organize-configuration
+
+- Navigate to the next lesson
+
+`cd hands-on-lab-terraform/lesson_06/structured/`  
+
+- Have a look at the directory structure (in Windows Explorer, Finder, or the following commands)
+
+`tree`
+`ls -la`
+`dir`
+
+As you can see we have two sub folders, `aci_access_policies` and `aci_tenant`. In our example, we configure the ACI Access Policies less frequently than the Tenant policies (AP, EPGs etc) and so it makes sense to split this into two separate directories. 
+
+- Navigate to the access policies
+
+`cd hands-on-lab-terraform/lesson_06/structured/aci_access_policies/`  
+
+- Intialise and apply the plan
+
+`terraform init`
+`terraform apply --auto-approve`
+
+<details>
+  <summary>Click to see expected output</summary>
+  
+  ```
+    aci_lldp_interface_policy.test_lldp: Creating...
+    aci_miscabling_protocol_interface_policy.test_miscable: Creating...
+    aci_lacp_policy.test_lacp: Creating...
+    aci_leaf_interface_profile.test_leaf_profile: Creating...
+    aci_attachable_access_entity_profile.test_ep: Creating...
+    aci_leaf_profile.tf_leaf_prof: Creating...
+    aci_miscabling_protocol_interface_policy.test_miscable: Creation complete after 4s [id=uni/infra/mcpIfP-conmurphy]
+    aci_leaf_interface_profile.test_leaf_profile: Creation complete after 4s [id=uni/infra/accportprof-conmurphy]
+    aci_lldp_interface_policy.test_lldp: Creation complete after 4s [id=uni/infra/lldpIfP-conmurphy]
+    aci_lacp_policy.test_lacp: Creation complete after 4s [id=uni/infra/lacplagp-conmurphy]
+    aci_attachable_access_entity_profile.test_ep: Creation complete after 4s [id=uni/infra/attentp-conmurphy]
+    aci_access_port_selector.test_selector: Creating...
+    aci_leaf_profile.tf_leaf_prof: Creation complete after 4s [id=uni/infra/nprof-conmurphy]
+    aci_access_port_selector.test_selector: Creation complete after 0s [id=uni/infra/accportprof-conmurphy/hports-conmurphy-typ-ALL]
+
+    Apply complete! Resources: 7 added, 0 changed, 0 destroyed.
+  ```
+</details>
+
+- Navigate to the tenant policies
+
+`cd hands-on-lab-terraform/lesson_06/structured/aci_tenant/`  
+
+- Intialise and apply the plan
+
+`terraform init`
+`terraform apply --auto-approve`
+
+<details>
+  <summary>Click to see expected output</summary>
+  
+  ```
+    aci_tenant.aci_tenant: Creating...
+    aci_tenant.aci_tenant: Creation complete after 2s [id=uni/tn-conmurphy]
+    aci_application_profile.myWebsite: Creating...
+    aci_application_profile.anotherApplication: Creating...
+    aci_application_profile.thirdApplication: Creating...
+    aci_bridge_domain.bd_for_subnet: Creating...
+    aci_application_profile.myWebsite: Creation complete after 0s [id=uni/tn-conmurphy/ap-my_website]
+    aci_application_epg.myWebsite-db: Creating...
+    aci_application_epg.myWebsite-web: Creating...
+    aci_application_profile.anotherApplication: Creation complete after 0s [id=uni/tn-conmurphy/ap-another_application]
+    aci_application_profile.thirdApplication: Creation complete after 0s [id=uni/tn-conmurphy/ap-third_application]
+    aci_application_epg.thirdApplication-web: Creating...
+    aci_application_epg.anotherApplication-web: Creating...
+    aci_application_epg.thirdApplication-db: Creating...
+    aci_application_epg.anotherApplication-db: Creating...
+    aci_bridge_domain.bd_for_subnet: Creation complete after 1s [id=uni/tn-conmurphy/BD-bd_for_subnet]
+    aci_subnet.demosubnet: Creating...
+    aci_application_epg.myWebsite-web: Creation complete after 2s [id=uni/tn-conmurphy/ap-my_website/epg-web]
+    aci_application_epg.myWebsite-db: Creation complete after 2s [id=uni/tn-conmurphy/ap-my_website/epg-db]
+    aci_application_epg.anotherApplication-web: Creation complete after 2s [id=uni/tn-conmurphy/ap-another_application/epg-web]
+    aci_application_epg.thirdApplication-web: Creation complete after 2s [id=uni/tn-conmurphy/ap-third_application/epg-web]
+    aci_application_epg.anotherApplication-db: Creation complete after 2s [id=uni/tn-conmurphy/ap-another_application/epg-db]
+    aci_application_epg.thirdApplication-db: Creation complete after 2s [id=uni/tn-conmurphy/ap-third_application/epg-db]
+    aci_subnet.demosubnet: Creation complete after 1s [id=uni/tn-conmurphy/BD-bd_for_subnet/subnet-[172.16.1.1/24]]
+
+    Warning: Interpolation-only expressions are deprecated
+
+      on aci_tenants.tf line 7, in resource "aci_bridge_domain" "bd_for_subnet":
+      7:   tenant_dn   = "${aci_tenant.aci_tenant.id}"
+
+    Terraform 0.11 and earlier required all non-constant expressions to be
+    provided via interpolation syntax, but this pattern is now deprecated. To
+    silence this warning, remove the "${ sequence from the start and the }"
+    sequence from the end of this expression, leaving just the inner expression.
+
+    Template interpolation syntax is still used to construct strings from
+    expressions when the template includes multiple interpolation sequences or a
+    mixture of literal strings and interpolations. This deprecation applies only
+    to templates that consist entirely of a single interpolation sequence.
+
+    (and 10 more similar warnings elsewhere)
 
 
-<span style="color:blue">some *This is Blue italic.* text</span>
+    Apply complete! Resources: 12 added, 0 changed, 0 destroyed.
 
+    Outputs:
+
+    application_profile_id = "uni/tn-conmurphy/ap-my_website"
+  ```
+</details>
+
+- Cleanup the configuration
+
+`terraform destroy`
+
+- Navigate to the access policies
+
+`cd hands-on-lab-terraform/lesson_06/structured/aci_access_policies/`  
+
+- Cleanup the configuration
+
+`terraform destroy`
+
+As you can see, we have to run the Terraform commands twice, however each run is managing a smaller amount of resources. This becomes important as the configuration grows. It also means if we accidentially run the `destroy` command we have reduced the number of resources affected.
+
+**Important Note:** There is no exact way to structure your directories however think about the following:
+
+- What is the purpose for this configuration? 
+- How often do the resources change? Does it make sense to refresh infrequently changing resources in the same plan as frequently changing resources?
+- Will multiple people be managing the same configuration or do they have different areas of expertise?
+- Is there a logical way to structure the configuration? e.g. using the same structure as the GUI - ACI splits up by tenant, access policies, fabric policies
+
+**Into to Modules**
+
+- Navigate to the next lesson
+
+`cd hands-on-lab-terraform/lesson_06/intro_to_modules/`  
+
+- Initialise Terraform and run a plan
+
+`terraform init`
+
+`terraform plan`
+
+<details>
+  <summary>Click to see expected output</summary>
+  
+  ```
+    module.application["secondApp"].aci_tenant.aci_tenant: Refreshing state... [id=uni/tn-conmurphy]
+    module.application["thirdApp"].aci_tenant.aci_tenant: Refreshing state... [id=uni/tn-conmurphy]
+    module.application["firstApp"].aci_tenant.aci_tenant: Refreshing state... [id=uni/tn-conmurphy]
+    module.application["secondApp"].aci_application_profile.aci_application_profile: Refreshing state... [id=uni/tn-conmurphy/ap-secondApp]
+    module.application["thirdApp"].aci_application_profile.aci_application_profile: Refreshing state... [id=uni/tn-conmurphy/ap-thirdApp]
+    module.application["firstApp"].aci_application_profile.aci_application_profile: Refreshing state... [id=uni/tn-conmurphy/ap-firstApp]
+    module.application["secondApp"].aci_application_epg.aci_application_epg["backend"]: Refreshing state... [id=uni/tn-conmurphy/ap-secondApp/epg-backend]
+    module.application["secondApp"].aci_application_epg.aci_application_epg["frontend"]: Refreshing state... [id=uni/tn-conmurphy/ap-secondApp/epg-frontend]
+    module.application["thirdApp"].aci_application_epg.aci_application_epg["secondary"]: Refreshing state... [id=uni/tn-conmurphy/ap-thirdApp/epg-secondary]
+    module.application["thirdApp"].aci_application_epg.aci_application_epg["primary"]: Refreshing state... [id=uni/tn-conmurphy/ap-thirdApp/epg-primary]
+    module.application["firstApp"].aci_application_epg.aci_application_epg["web"]: Refreshing state... [id=uni/tn-conmurphy/ap-firstApp/epg-web]
+    module.application["firstApp"].aci_application_epg.aci_application_epg["app"]: Refreshing state... [id=uni/tn-conmurphy/ap-firstApp/epg-app]
+    module.application["firstApp"].aci_application_epg.aci_application_epg["db"]: Refreshing state... [id=uni/tn-conmurphy/ap-firstApp/epg-db]
+
+    An execution plan has been generated and is shown below.
+    Resource actions are indicated with the following symbols:
+      + create
+
+    Terraform will perform the following actions:
+
+      # module.application["firstApp"].aci_application_epg.aci_application_epg["app"] will be created
+      + resource "aci_application_epg" "aci_application_epg" {
+          + annotation             = "orchestrator:terraform"
+          + application_profile_dn = (known after apply)
+          + description            = "this is the web epg created by terraform"
+          + exception_tag          = (known after apply)
+          + flood_on_encap         = "enabled"
+          + fwd_ctrl               = "none"
+          + has_mcast_source       = "no"
+          + id                     = (known after apply)
+          + is_attr_based_epg      = (known after apply)
+          + match_t                = "AtleastOne"
+          + name                   = "app"
+          + name_alias             = "app"
+          + pc_enf_pref            = "unenforced"
+          + pref_gr_memb           = "exclude"
+          + prio                   = "unspecified"
+          + shutdown               = "no"
+        }
+
+      # module.application["firstApp"].aci_application_epg.aci_application_epg["db"] will be created
+      + resource "aci_application_epg" "aci_application_epg" {
+          + annotation             = "orchestrator:terraform"
+          + application_profile_dn = (known after apply)
+          + description            = "this is the web epg created by terraform"
+          + exception_tag          = (known after apply)
+          + flood_on_encap         = "enabled"
+          + fwd_ctrl               = "none"
+          + has_mcast_source       = "no"
+          + id                     = (known after apply)
+          + is_attr_based_epg      = (known after apply)
+          + match_t                = "AtleastOne"
+          + name                   = "db"
+          + name_alias             = "db"
+          + pc_enf_pref            = "unenforced"
+          + pref_gr_memb           = "exclude"
+          + prio                   = "unspecified"
+          + shutdown               = "no"
+        }
+
+      # module.application["firstApp"].aci_application_epg.aci_application_epg["web"] will be created
+      + resource "aci_application_epg" "aci_application_epg" {
+          + annotation             = "orchestrator:terraform"
+          + application_profile_dn = (known after apply)
+          + description            = "this is the web epg created by terraform"
+          + exception_tag          = (known after apply)
+          + flood_on_encap         = "enabled"
+          + fwd_ctrl               = "none"
+          + has_mcast_source       = "no"
+          + id                     = (known after apply)
+          + is_attr_based_epg      = (known after apply)
+          + match_t                = "AtleastOne"
+          + name                   = "web"
+          + name_alias             = "web"
+          + pc_enf_pref            = "unenforced"
+          + pref_gr_memb           = "exclude"
+          + prio                   = "unspecified"
+          + shutdown               = "no"
+        }
+
+      # module.application["firstApp"].aci_application_profile.aci_application_profile will be created
+      + resource "aci_application_profile" "aci_application_profile" {
+          + annotation  = "orchestrator:terraform"
+          + description = (known after apply)
+          + id          = (known after apply)
+          + name        = "firstApp"
+          + name_alias  = (known after apply)
+          + prio        = (known after apply)
+          + tenant_dn   = (known after apply)
+        }
+
+      # module.application["firstApp"].aci_tenant.aci_tenant will be created
+      + resource "aci_tenant" "aci_tenant" {
+          + annotation  = "orchestrator:terraform"
+          + description = (known after apply)
+          + id          = (known after apply)
+          + name        = "conmurphy"
+          + name_alias  = (known after apply)
+        }
+
+      # module.application["secondApp"].aci_application_epg.aci_application_epg["backend"] will be created
+      + resource "aci_application_epg" "aci_application_epg" {
+          + annotation             = "orchestrator:terraform"
+          + application_profile_dn = (known after apply)
+          + description            = "this is the web epg created by terraform"
+          + exception_tag          = (known after apply)
+          + flood_on_encap         = "enabled"
+          + fwd_ctrl               = "none"
+          + has_mcast_source       = "no"
+          + id                     = (known after apply)
+          + is_attr_based_epg      = (known after apply)
+          + match_t                = "AtleastOne"
+          + name                   = "backend"
+          + name_alias             = "backend"
+          + pc_enf_pref            = "unenforced"
+          + pref_gr_memb           = "exclude"
+          + prio                   = "unspecified"
+          + shutdown               = "no"
+        }
+
+      # module.application["secondApp"].aci_application_epg.aci_application_epg["frontend"] will be created
+      + resource "aci_application_epg" "aci_application_epg" {
+          + annotation             = "orchestrator:terraform"
+          + application_profile_dn = (known after apply)
+          + description            = "this is the web epg created by terraform"
+          + exception_tag          = (known after apply)
+          + flood_on_encap         = "enabled"
+          + fwd_ctrl               = "none"
+          + has_mcast_source       = "no"
+          + id                     = (known after apply)
+          + is_attr_based_epg      = (known after apply)
+          + match_t                = "AtleastOne"
+          + name                   = "frontend"
+          + name_alias             = "frontend"
+          + pc_enf_pref            = "unenforced"
+          + pref_gr_memb           = "exclude"
+          + prio                   = "unspecified"
+          + shutdown               = "no"
+        }
+
+      # module.application["secondApp"].aci_application_profile.aci_application_profile will be created
+      + resource "aci_application_profile" "aci_application_profile" {
+          + annotation  = "orchestrator:terraform"
+          + description = (known after apply)
+          + id          = (known after apply)
+          + name        = "secondApp"
+          + name_alias  = (known after apply)
+          + prio        = (known after apply)
+          + tenant_dn   = (known after apply)
+        }
+
+      # module.application["secondApp"].aci_tenant.aci_tenant will be created
+      + resource "aci_tenant" "aci_tenant" {
+          + annotation  = "orchestrator:terraform"
+          + description = (known after apply)
+          + id          = (known after apply)
+          + name        = "conmurphy"
+          + name_alias  = (known after apply)
+        }
+
+      # module.application["thirdApp"].aci_application_epg.aci_application_epg["primary"] will be created
+      + resource "aci_application_epg" "aci_application_epg" {
+          + annotation             = "orchestrator:terraform"
+          + application_profile_dn = (known after apply)
+          + description            = "this is the web epg created by terraform"
+          + exception_tag          = (known after apply)
+          + flood_on_encap         = "enabled"
+          + fwd_ctrl               = "none"
+          + has_mcast_source       = "no"
+          + id                     = (known after apply)
+          + is_attr_based_epg      = (known after apply)
+          + match_t                = "AtleastOne"
+          + name                   = "primary"
+          + name_alias             = "primary"
+          + pc_enf_pref            = "unenforced"
+          + pref_gr_memb           = "exclude"
+          + prio                   = "unspecified"
+          + shutdown               = "no"
+        }
+
+      # module.application["thirdApp"].aci_application_epg.aci_application_epg["secondary"] will be created
+      + resource "aci_application_epg" "aci_application_epg" {
+          + annotation             = "orchestrator:terraform"
+          + application_profile_dn = (known after apply)
+          + description            = "this is the web epg created by terraform"
+          + exception_tag          = (known after apply)
+          + flood_on_encap         = "enabled"
+          + fwd_ctrl               = "none"
+          + has_mcast_source       = "no"
+          + id                     = (known after apply)
+          + is_attr_based_epg      = (known after apply)
+          + match_t                = "AtleastOne"
+          + name                   = "secondary"
+          + name_alias             = "secondary"
+          + pc_enf_pref            = "unenforced"
+          + pref_gr_memb           = "exclude"
+          + prio                   = "unspecified"
+          + shutdown               = "no"
+        }
+
+      # module.application["thirdApp"].aci_application_profile.aci_application_profile will be created
+      + resource "aci_application_profile" "aci_application_profile" {
+          + annotation  = "orchestrator:terraform"
+          + description = (known after apply)
+          + id          = (known after apply)
+          + name        = "thirdApp"
+          + name_alias  = (known after apply)
+          + prio        = (known after apply)
+          + tenant_dn   = (known after apply)
+        }
+
+      # module.application["thirdApp"].aci_tenant.aci_tenant will be created
+      + resource "aci_tenant" "aci_tenant" {
+          + annotation  = "orchestrator:terraform"
+          + description = (known after apply)
+          + id          = (known after apply)
+          + name        = "conmurphy"
+          + name_alias  = (known after apply)
+        }
+
+    Plan: 13 to add, 0 to change, 0 to destroy.
+
+    ------------------------------------------------------------------------
+
+    Note: You didn't specify an "-out" parameter to save this plan, so Terraform
+    can't guarantee that exactly these actions will be performed if
+    "terraform apply" is subsequently run.
+  ```
+</details>
+
+- Open the `main.tf` file in your editor and have a look at the structure. We've defined a nested map as a local value. In this example it's our application profiles and EPGs. This is specific to our example module but you could design and build modules to meet your requirements.
+
+- Scroll down and you'll see a module to build our "application" (Application profiles and EPGs). For this module we are using the code found in the `./modules/application` folder. We then loop through each of the application profiles and use the map key for the app profile name (e.g. `firstApp`). We use the value of the `epg` key for our EPG names. Since there are multiple EPGs we create a set and pass the set to our module.
+
+https://www.terraform.io/docs/language/functions/toset.html
+
+- Navigate to the `application` module
+
+`cd hands-on-lab-terraform/lesson_06/intro_to_modules/modules/application/`
+
+- Open the `main.tf` file in your editor and have a look at how it's constructed.
+
+The configuration looks very similar to how we previously configured the application profiles, however with a few changes. 
+
+In our `aci_application_profile` resource we are defining the application name (this was `each.key`)
+
+We only have a single `aci_application_epg` resource but note `for_each = var.epg`. Remember that we created a set from `each.value["epg"]` and stored this in the variable, `epg`. Since it's a set of strings we can loop through it and create a new resource for each EPG name it finds. The application profile and tenant name will remain the same which allows us to maintain the dependencies.
+
+https://www.terraform.io/docs/language/meta-arguments/for_each.html
+
+- Cleanup the environment
+
+`terraform destroy`
+
+**Important Note:** This was a basic introduction to modules and not necessarily a realistic example. Please have a look at the references to continue learning about module compilation.
 
 ## Optional: Other Useful Terraform Commands
 Here are some further Terraform commands you might find useful when working with the CLI
