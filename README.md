@@ -2230,9 +2230,7 @@ This lesson will give you an introduction to how you might structure your Terraf
 As 
 
 
-<div class="alert alert-success">
-some text
-<div>
+<span style="color:blue">some *This is Blue italic.* text</span>
 
 
 ## Optional: Other Useful Terraform Commands
