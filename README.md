@@ -2141,7 +2141,99 @@ You should now have all the existing resourcs managed in your statefile.
 
 As you can see by the output, Terraform has successfully imported the configuration and when we re-run the plan, no new resources are created.
 
-## Optional: Modules
+- Cleanup your ACI tenant and all objects within that tenant.
+
+`terraform destroy`
+
+## Intro to Directory Structure and Modules
+
+This lesson will give you an introduction to how you might structure your Terraform code and start building reuseable modules. Please have a look at the references below for detailed information and best practices.
+
+**Directory Structures**
+
+- Navigate to the folder containing the next lesson
+
+`cd hands-on-lab-terraform/lesson_06/all_in_one/`  
+
+- Intialise and apply the plan
+
+- `terraform init`
+- `terraform apply --auto-approve`
+
+<details>
+  <summary>Click to see expected output</summary>
+  
+  ```
+    aci_tenant.aci_tenant: Creating...
+    aci_attachable_access_entity_profile.test_ep: Creating...
+    aci_lacp_policy.test_lacp: Creating...
+    aci_miscabling_protocol_interface_policy.test_miscable: Creating...
+    aci_leaf_interface_profile.test_leaf_profile: Creating...
+    aci_leaf_profile.tf_leaf_prof: Creating...
+    aci_lldp_interface_policy.test_lldp: Creating...
+    aci_lacp_policy.test_lacp: Creation complete after 1s [id=uni/infra/lacplagp-conmurphy]
+    aci_miscabling_protocol_interface_policy.test_miscable: Creation complete after 1s [id=uni/infra/mcpIfP-conmurphy]
+    aci_leaf_interface_profile.test_leaf_profile: Creation complete after 1s [id=uni/infra/accportprof-conmurphy]
+    aci_attachable_access_entity_profile.test_ep: Creation complete after 1s [id=uni/infra/attentp-conmurphy]
+    aci_lldp_interface_policy.test_lldp: Creation complete after 1s [id=uni/infra/lldpIfP-conmurphy]
+    aci_access_port_selector.test_selector: Creating...
+    aci_tenant.aci_tenant: Creation complete after 3s [id=uni/tn-conmurphy]
+    aci_leaf_profile.tf_leaf_prof: Creation complete after 3s [id=uni/infra/nprof-conmurphy]
+    aci_application_profile.myWebsite: Creating...
+    aci_application_profile.anotherApplication: Creating...
+    aci_application_profile.thirdApplication: Creating...
+    aci_bridge_domain.bd_for_subnet: Creating...
+    aci_access_port_selector.test_selector: Creation complete after 2s [id=uni/infra/accportprof-conmurphy/hports-conmurphy-typ-ALL]
+    aci_application_profile.myWebsite: Creation complete after 2s [id=uni/tn-conmurphy/ap-my_website]
+    aci_application_epg.myWebsite-web: Creating...
+    aci_application_epg.myWebsite-db: Creating...
+    aci_application_profile.thirdApplication: Creation complete after 2s [id=uni/tn-conmurphy/ap-third_application]
+    aci_application_profile.anotherApplication: Creation complete after 2s [id=uni/tn-conmurphy/ap-another_application]
+    aci_application_epg.thirdApplication-db: Creating...
+    aci_application_epg.anotherApplication-web: Creating...
+    aci_application_epg.thirdApplication-web: Creating...
+    aci_application_epg.anotherApplication-db: Creating...
+    aci_bridge_domain.bd_for_subnet: Creation complete after 4s [id=uni/tn-conmurphy/BD-bd_for_subnet]
+    aci_subnet.demosubnet: Creating...
+    aci_application_epg.myWebsite-db: Creation complete after 3s [id=uni/tn-conmurphy/ap-my_website/epg-db]
+    aci_application_epg.myWebsite-web: Creation complete after 3s [id=uni/tn-conmurphy/ap-my_website/epg-web]
+    aci_application_epg.thirdApplication-web: Creation complete after 3s [id=uni/tn-conmurphy/ap-third_application/epg-web]
+    aci_application_epg.thirdApplication-db: Creation complete after 3s [id=uni/tn-conmurphy/ap-third_application/epg-db]
+    aci_application_epg.anotherApplication-web: Creation complete after 3s [id=uni/tn-conmurphy/ap-another_application/epg-web]
+    aci_application_epg.anotherApplication-db: Creation complete after 3s [id=uni/tn-conmurphy/ap-another_application/epg-db]
+    aci_subnet.demosubnet: Creation complete after 1s [id=uni/tn-conmurphy/BD-bd_for_subnet/subnet-[172.16.1.1/24]]
+
+    Warning: Interpolation-only expressions are deprecated
+
+      on aci_tenants.tf line 7, in resource "aci_bridge_domain" "bd_for_subnet":
+      7:   tenant_dn   = "${aci_tenant.aci_tenant.id}"
+
+    Terraform 0.11 and earlier required all non-constant expressions to be
+    provided via interpolation syntax, but this pattern is now deprecated. To
+    silence this warning, remove the "${ sequence from the start and the }"
+    sequence from the end of this expression, leaving just the inner expression.
+
+    Template interpolation syntax is still used to construct strings from
+    expressions when the template includes multiple interpolation sequences or a
+    mixture of literal strings and interpolations. This deprecation applies only
+    to templates that consist entirely of a single interpolation sequence.
+
+    (and 10 more similar warnings elsewhere)
+
+
+    Apply complete! Resources: 19 added, 0 changed, 0 destroyed.
+  ```
+</details>
+
+- Note how many resources and what types of resources have been created (19 in the expected output). As you should see, there are a mixture of `leaf access policies` and `tenant/application policies`. 
+
+As 
+
+
+<div class="alert alert-success">
+some text
+<div>
+
 
 ## Optional: Other Useful Terraform Commands
 Here are some further Terraform commands you might find useful when working with the CLI
@@ -2165,3 +2257,7 @@ Here are some further Terraform commands you might find useful when working with
 - Taint a resource so that it is recreated on the next `terraform apply`
 
 `terraform taint aci_application_epg.db`
+
+
+## References
+
