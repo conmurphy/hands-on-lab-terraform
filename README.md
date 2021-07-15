@@ -960,7 +960,7 @@ As you can see, we have updated the variable in one location but the two EPGs us
 
 Terraform can also return and print values after a plan has been applied. This is through the use of the output value. This feature is useful when you start to use modules within Terraform.
 
-Open the `variables.tf` file and after the `locals` block paste the following.
+- Open the `variables.tf` file and after the `locals` block paste the following. Then save the file.
 
 ```
 output "application_profile_id" {
@@ -1042,6 +1042,14 @@ output "application_profile_id" {
 </details>
 
 You should see right at the very end an Output Value with the ID of your application profile.
+
+- Open the `variables.tf` file and delete the output variable in preparation for the next lesson. Then save the file. 
+
+```
+output "application_profile_id" {
+  value = aci_application_profile.myWebsite.id
+}
+```
 
 **Dependencies**
 
@@ -1560,7 +1568,7 @@ Based on this it assumed the ACI configuration was no longer needed and removed 
 
 ## 4. Resources vs Data Source
 
-So far we've been creatomg, updating, and deleting resources with Terraform. What happens if a resource is already configured and we simply need to reference it?
+So far we've been creating, updating, and deleting resources with Terraform. What happens if a resource is already configured and we simply need to reference it?
 
 We can use the Terraform `data source` to access configuration created outside of Terraform or by another Terraform plan. The data source is **read only**
 
@@ -1742,6 +1750,9 @@ Notice that we are specifying the name of a tenant, `common`. Terraform will not
 
 - Expand the `Application Profiles` and verify that a profile with your username exists
 
+- Cleanup your ACI configuration and all objects within that tenant.
+
+`terraform destroy`
 
 ## 5. Importing existing configuratiion
 
@@ -2158,6 +2169,8 @@ This lesson will give you an introduction to how you might structure your Terraf
 - Intialise and apply the plan
 
 `terraform init`
+
+
 `terraform apply --auto-approve`
 
 <details>
@@ -2233,6 +2246,10 @@ One option to address this issue is to separate your configuration into their ow
 
 https://learn.hashicorp.com/tutorials/terraform/organize-configuration
 
+- Cleanup your ACI tenant and all objects within that tenant.
+
+`terraform destroy`
+
 - Navigate to the next lesson
 
 `cd hands-on-lab-terraform/lesson_06/structured/`  
@@ -2240,7 +2257,9 @@ https://learn.hashicorp.com/tutorials/terraform/organize-configuration
 - Have a look at the directory structure (in Windows Explorer, Finder, or the following commands)
 
 `tree`
+
 `ls -la`
+
 `dir`
 
 As you can see we have two sub folders, `aci_access_policies` and `aci_tenant`. In our example, we configure the ACI Access Policies less frequently than the Tenant policies (AP, EPGs etc) and so it makes sense to split this into two separate directories. 
@@ -2252,6 +2271,7 @@ As you can see we have two sub folders, `aci_access_policies` and `aci_tenant`. 
 - Intialise and apply the plan
 
 `terraform init`
+
 `terraform apply --auto-approve`
 
 <details>
@@ -2284,6 +2304,7 @@ As you can see we have two sub folders, `aci_access_policies` and `aci_tenant`. 
 - Intialise and apply the plan
 
 `terraform init`
+
 `terraform apply --auto-approve`
 
 <details>
@@ -2378,20 +2399,6 @@ As you can see, we have to run the Terraform commands twice, however each run is
   <summary>Click to see expected output</summary>
   
   ```
-    module.application["secondApp"].aci_tenant.aci_tenant: Refreshing state... [id=uni/tn-conmurphy]
-    module.application["thirdApp"].aci_tenant.aci_tenant: Refreshing state... [id=uni/tn-conmurphy]
-    module.application["firstApp"].aci_tenant.aci_tenant: Refreshing state... [id=uni/tn-conmurphy]
-    module.application["secondApp"].aci_application_profile.aci_application_profile: Refreshing state... [id=uni/tn-conmurphy/ap-secondApp]
-    module.application["thirdApp"].aci_application_profile.aci_application_profile: Refreshing state... [id=uni/tn-conmurphy/ap-thirdApp]
-    module.application["firstApp"].aci_application_profile.aci_application_profile: Refreshing state... [id=uni/tn-conmurphy/ap-firstApp]
-    module.application["secondApp"].aci_application_epg.aci_application_epg["backend"]: Refreshing state... [id=uni/tn-conmurphy/ap-secondApp/epg-backend]
-    module.application["secondApp"].aci_application_epg.aci_application_epg["frontend"]: Refreshing state... [id=uni/tn-conmurphy/ap-secondApp/epg-frontend]
-    module.application["thirdApp"].aci_application_epg.aci_application_epg["secondary"]: Refreshing state... [id=uni/tn-conmurphy/ap-thirdApp/epg-secondary]
-    module.application["thirdApp"].aci_application_epg.aci_application_epg["primary"]: Refreshing state... [id=uni/tn-conmurphy/ap-thirdApp/epg-primary]
-    module.application["firstApp"].aci_application_epg.aci_application_epg["web"]: Refreshing state... [id=uni/tn-conmurphy/ap-firstApp/epg-web]
-    module.application["firstApp"].aci_application_epg.aci_application_epg["app"]: Refreshing state... [id=uni/tn-conmurphy/ap-firstApp/epg-app]
-    module.application["firstApp"].aci_application_epg.aci_application_epg["db"]: Refreshing state... [id=uni/tn-conmurphy/ap-firstApp/epg-db]
-
     An execution plan has been generated and is shown below.
     Resource actions are indicated with the following symbols:
       + create
