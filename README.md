@@ -308,7 +308,7 @@ can't guarantee that exactly these actions will be performed if
 
 - Destroy your ACI tenant and all objects within that tenant.
 
-`terraform destroy`
+`terraform destroy -auto-approve`
 
  - You will need to enter the ACI URL, username, and password. Use your **username** for the tenant name
 
@@ -820,7 +820,7 @@ The names of the files do not matter so long as they end in `.tf`. In our exampl
 
 - Cleanup your ACI tenant and all objects within that tenant.
 
-`terraform destroy`
+`terraform destroy -auto-approve`
 
 
 ## 3. More on Variables and Dependencies
@@ -1575,7 +1575,7 @@ Based on this it assumed the ACI configuration was no longer needed and removed 
 
 - Cleanup your ACI configuration and all objects within that tenant.
 
-`terraform destroy`
+`terraform destroy -auto-approve`
 
 
 ## 4. Resources vs Data Source
@@ -1764,7 +1764,7 @@ Notice that we are specifying the name of a tenant, `common`. Terraform will not
 
 - Cleanup your ACI configuration and all objects within that tenant.
 
-`terraform destroy`
+`terraform destroy -auto-approve`
 
 ## 5. Importing existing configuratiion
 
@@ -2166,7 +2166,7 @@ As you can see by the output, Terraform has successfully imported the configurat
 
 - Cleanup your ACI tenant and all objects within that tenant.
 
-`terraform destroy`
+`terraform destroy -auto-approve`
 
 ## 6. Intro to Directory Structure and Modules
 
@@ -2260,7 +2260,7 @@ https://learn.hashicorp.com/tutorials/terraform/organize-configuration
 
 - Cleanup your ACI tenant and all objects within that tenant.
 
-`terraform destroy`
+`terraform destroy -auto-approve`
 
 - Navigate to the next lesson
 
@@ -2376,7 +2376,7 @@ As you can see we have two sub folders, `aci_access_policies` and `aci_tenant`. 
 
 - Cleanup the configuration
 
-`terraform destroy`
+`terraform destroy -auto-approve`
 
 - Navigate to the access policies
 
@@ -2384,7 +2384,7 @@ As you can see we have two sub folders, `aci_access_policies` and `aci_tenant`. 
 
 - Cleanup the configuration
 
-`terraform destroy`
+`terraform destroy -auto-approve`
 
 As you can see, we have to run the Terraform commands twice, however each run is managing a smaller amount of resources. This becomes important as the configuration grows. It also means if we accidentially run the `destroy` command we have reduced the number of resources affected.
 
@@ -2649,7 +2649,7 @@ https://www.terraform.io/docs/language/meta-arguments/for_each.html
 
 - Cleanup the environment
 
-`terraform destroy`
+`terraform destroy -auto-approve`
 
 **Important Note:** This was a basic introduction to modules and not necessarily a realistic example. Please have a look at the references to continue learning about module compilation.
 
