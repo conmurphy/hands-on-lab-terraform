@@ -1104,7 +1104,7 @@ This is performed through the use of a Statefile.
   https://www.terraform.io/docs/language/state/index.html
 
 </details>
-- If you're noot still in lesson_03, navigate to the folder
+- If you're not still in lesson_03, navigate to the folder
 
 `cd hands-on-lab-terraform/lesson_03/`
 
@@ -1391,7 +1391,7 @@ As you can see the apply should have gone through successfully, even though the 
 
 **In our example, ACI is able to determine that the object exists and can update the existing configuration**
 
-You'll also note that you should now have a new `terraform.tfstate` file alongside your `terraform.tfstate_hidden` file. This is because terraform did not find a file with the name, `terraform.tfstate`, and creatd a new one for you.
+You'll also note that you should now have a new `terraform.tfstate` file alongside your `terraform.tfstate_hidden` file. This is because terraform did not find a file with the name, `terraform.tfstate`, and created a new one for you.
 
 ### What happens if delete the Terraform ACI config?
 - Rename the ACI configuration file so Terraform can't find it
