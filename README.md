@@ -1989,7 +1989,7 @@ Terraform import requires the format, `terraform import <address> <id>`. With AC
 - Import the existing ACI resources. **IMPORTANT NOTE: `Terraform import` requires your configuration to already exist and only imports the state.**
 
 
-`terraform import aci_tenant.aci_tenant uni/tn-conmurphy`
+`terraform import aci_tenant.aci_tenant uni/tn-<YOUR_TENANT_NAME>`
 
 <details>
   <summary>Click to see expected output</summary>
@@ -2042,15 +2042,15 @@ Terraform import requires the format, `terraform import <address> <id>`. With AC
   ```
 </details>
 
-`terraform import aci_bridge_domain.bd_for_subnet uni/tn-conmurphy/BD-bd_for_subnet`
+`terraform import aci_bridge_domain.bd_for_subnet uni/tn-<YOUR_TENANT_NAME>/BD-bd_for_subnet`
 
-`terraform import aci_subnet.demosubnet "uni/tn-conmurphy/BD-bd_for_subnet/subnet-[172.16.1.1/24]"`
+`terraform import aci_subnet.demosubnet "uni/tn-<YOUR_TENANT_NAME>/BD-bd_for_subnet/subnet-[172.16.1.1/24]"`
 
-`terraform import aci_application_profile.myWebsite uni/tn-conmurphy/ap-my_website`
+`terraform import aci_application_profile.myWebsite uni/tn-<YOUR_TENANT_NAME>/ap-my_website`
 
-`terraform import aci_application_epg.web uni/tn-conmurphy/ap-my_website/epg-web`
+`terraform import aci_application_epg.web uni/tn-<YOUR_TENANT_NAME>/ap-my_website/epg-web`
 
-`terraform import aci_application_epg.db uni/tn-conmurphy/ap-my_website/epg-db`
+`terraform import aci_application_epg.db uni/tn-<YOUR_TENANT_NAME>/ap-my_website/epg-db`
 
 You should now have all the existing resourcs managed in your statefile. 
 
