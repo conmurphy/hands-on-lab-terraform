@@ -837,11 +837,13 @@ https://learn.hashicorp.com/tutorials/terraform/locals
 **IMPORTANT NOTE: YOU NEED TO INSERT YOUR USERNAME**
 
 Mac
+
 `export TF_VAR_aci_tenant=<your username here>`
 
 `export TF_VAR_apic_password=ciscopsdt`
 
 Windows
+
 `set TF_VAR_aci_tenant=<your username here>`
 
 `set TF_VAR_apic_password=ciscopsdt`
