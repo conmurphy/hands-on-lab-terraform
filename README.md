@@ -1,4 +1,4 @@
-#Table of Contents
+# Table of Contents
 - [Getting familiar with Terraform commands and files](#1-getting-familiar-with-terraform-commands-and-files)
 - [Config structure and variables](#2-config-structure-and-variables)
 - [More on Variables and Dependencies](#3-more-on-variables-and-dependencies)
