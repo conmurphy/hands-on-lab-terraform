@@ -6,7 +6,7 @@
 - [Resources vs Data Source](#4-resources-vs-data-source)
 - [Importing existing configuratiion](#5-importing-existing-configuratiion)
 - [Intro to Directory Structure and Modules](#6-intro-to-directory-structure-and-modules)
-- [Introto Terraform Cloud](#7-intro-to-terraform-cloud)
+- [Intro to Terraform Cloud](#7-intro-to-terraform-cloud)
 - [Optional: Other Useful Terraform Commands](#optional--other-useful-terraform-commands)
 - [References](#references)
 
