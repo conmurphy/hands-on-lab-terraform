@@ -2168,7 +2168,7 @@ As you can see by the output, Terraform has successfully imported the configurat
 
 `terraform destroy`
 
-## Intro to Directory Structure and Modules
+## 6. Intro to Directory Structure and Modules
 
 This lesson will give you an introduction to how you might structure your Terraform code and start building reuseable modules. Please have a look at the references below for detailed information and best practices.
 
