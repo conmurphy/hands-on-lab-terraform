@@ -897,7 +897,7 @@ Since our EPGs have a number of common properties we will store those in a local
   ```
 </details>
 
-- Open the `variables.tf` file and modified the  `local.flood_on_encap` variable from `disabled` to `enabled`
+- Open the `variables.tf` file and modified the  `local.flood_on_encap` variable from `enabled` to `disabled`
 
 - Run a plan and look at the results
 
