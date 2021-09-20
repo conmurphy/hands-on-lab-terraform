@@ -2641,6 +2641,12 @@ https://www.terraform.io/docs/language/meta-arguments/for_each.html
 
 **Important Note:** This was a basic introduction to modules and not necessarily a realistic example. Please have a look at the references to continue learning about module compilation.
 
+## 7. Introduction to Terraform Cloud
+
+- Fork the current repo 
+
+[SCREENSHOTS HERE]
+
 ## Optional: Other Useful Terraform Commands
 Here are some further Terraform commands you might find useful when working with the CLI
 
