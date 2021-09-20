@@ -836,9 +836,15 @@ https://learn.hashicorp.com/tutorials/terraform/locals
 
 **IMPORTANT NOTE: YOU NEED TO INSERT YOUR USERNAME**
 
+Mac
 - `export TF_VAR_aci_tenant=<your username here>`
 
 - `export TF_VAR_apic_password=ciscopsdt`
+
+Windows
+- `set TF_VAR_aci_tenant=<your username here>`
+
+- `set TF_VAR_apic_password=ciscopsdt`
 
 - Navigate to the next lesson
 
@@ -1185,7 +1191,11 @@ This is performed through the use of a Statefile.
 
 - Rename the statefile so Terraform can't find it
 
+Mac
 `mv terraform.tfstate terraform.tfstate_hidden`
+
+Windows
+`ren terraform.tfstate terraform.tfstate_hidden`
 
 - Run another `plan` and notice that Terraform is planning to create new ACI Tenant, APN, EPG, and BD objects. 
 
@@ -1396,7 +1406,11 @@ You'll also note that you should now have a new `terraform.tfstate` file alongsi
 ### What happens if delete the Terraform ACI config?
 - Rename the ACI configuration file so Terraform can't find it
 
+Mac
 `mv aci.tf aci.tf_hidden`
+
+Windows
+`ren aci.tf aci.tf_hidden`
 
 - Run another `plan` and notice that Terraform is planning to delete all of your ACI configuration!
 
@@ -1825,7 +1839,12 @@ Notice that we are specifying the name of a tenant, `common`. Terraform will not
 
 - Remove the Terraform state fiile
 
+Mac
 `mv terraform.tfstate terraform.tfstate_hidden`
+
+Windows
+`ren terraform.tfstate terraform.tfstate_hidden`
+
 
 - Re-run the Terraform plan to see what will happen.
 
