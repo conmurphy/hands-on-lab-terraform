@@ -1,3 +1,15 @@
+#Table of Contents
+- [Getting familiar with Terraform commands and files](#1-getting-familiar-with-terraform-commands-and-files)
+- [Config structure and variables](#2-config-structure-and-variables)
+- [More on Variables and Dependencies](#3-more-on-variables-and-dependencies)
+- [Understanding Terraform State](#3b-understanding-terraform-state)
+- [Resources vs Data Source](#4-resources-vs-data-source)
+- [Importing existing configuratiion](#5-importing-existing-configuratiion)
+- [Intro to Directory Structure and Modules](#6-intro-to-directory-structure-and-modules)
+- [Introto Terraform Cloud](#7-intro-to-terraform-cloud)
+- [Optional: Other Useful Terraform Commands](#optional--other-useful-terraform-commands)
+- [References](#references)
+
 ## 1. Getting familiar with Terraform commands and files
 - Clone the following Git repository
 
@@ -2383,7 +2395,7 @@ As you can see, we have to run the Terraform commands twice, however each run is
 - Will multiple people be managing the same configuration or do they have different areas of expertise?
 - Is there a logical way to structure the configuration? e.g. using the same structure as the GUI - ACI splits up by tenant, access policies, fabric policies
 
-**Into to Modules**
+**6. Into to Modules**
 
 - Navigate to the next lesson
 
@@ -2641,7 +2653,7 @@ https://www.terraform.io/docs/language/meta-arguments/for_each.html
 
 **Important Note:** This was a basic introduction to modules and not necessarily a realistic example. Please have a look at the references to continue learning about module compilation.
 
-## 7. Introduction to Terraform Cloud
+## 7. Intro to Terraform Cloud
 
 - Fork the current repo 
 
