@@ -19,7 +19,7 @@
 
 `cd hands-on-lab-terraform/lesson_01/`  
 
-- In a browser go to https://sandboxapicdc.cisco.com/ and login (`admin`/`ciscopsdt`)  
+- In a browser go to https://198.18.133.200 and login (`admin`/`C1sco12345`)  
 
 - Verify that no tenant exists with your Cisco username  
 
@@ -89,7 +89,7 @@
   Enter a value: conmurphy
 
   var.apic_password
-  Enter a value: ciscopsdt
+  Enter a value: C1sco12345
 
   var.apic_url
   Enter a value: https://sandboxapicdc.cisco.com 
@@ -254,7 +254,7 @@ can't guarantee that exactly these actions will be performed if
   Enter a value: conmurphy
 
   var.apic_password
-  Enter a value: ciscopsdt
+  Enter a value: C1sco12345
 
   var.apic_url
   Enter a value: https://sandboxapicdc.cisco.com 
@@ -320,7 +320,7 @@ can't guarantee that exactly these actions will be performed if
   Enter a value: conmurphy
 
   var.apic_password
-  Enter a value: ciscopsdt
+  Enter a value: C1sco12345
 
   var.apic_url
   Enter a value: https://sandboxapicdc.cisco.com 
@@ -618,7 +618,7 @@ The names of the files do not matter so long as they end in `.tf`. In our exampl
   Enter a value: conmurphy
 
   var.apic_password
-  Enter a value: ciscopsdt
+  Enter a value: C1sco12345
   ```
 
 <details>
@@ -774,7 +774,7 @@ The names of the files do not matter so long as they end in `.tf`. In our exampl
   Enter a value: conmurphy
 
   var.apic_password
-  Enter a value: ciscopsdt
+  Enter a value: C1sco12345
   ```
   
 <details>
@@ -840,13 +840,13 @@ Mac
 
 `export TF_VAR_aci_tenant=<your username here>`
 
-`export TF_VAR_apic_password=ciscopsdt`
+`export TF_VAR_apic_password=C1sco12345`
 
 Windows
 
 `set TF_VAR_aci_tenant=<your username here>`
 
-`set TF_VAR_apic_password=ciscopsdt`
+`set TF_VAR_apic_password=C1sco12345`
 
 - Navigate to the next lesson
 
@@ -1772,7 +1772,7 @@ Notice that we are specifying the name of a tenant, `common`. Terraform will not
   ```
 </details>
 
-- In a browser go to https://sandboxapicdc.cisco.com/ and login (`admin`/`ciscopsdt`)  
+- In a browser go to https://198.18.133.200 and login (`admin`/`C1sco12345`)  
 
 - Click on the `Tenant` tab and then double click to view the `common` tenant
 
