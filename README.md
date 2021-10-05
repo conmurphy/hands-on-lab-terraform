@@ -2676,6 +2676,8 @@ https://www.terraform.io/docs/language/meta-arguments/for_each.html
 
 ## 7. Intro to Terraform Cloud
 
+In this module we'll now explore another method for using Terraform by using Hashicorp's Terraform Cloud which is a SaaS delivered way of using Terraform. It manages Terraform runs in a consistent and reliable environment and addresses many common challenges of using Terraform at scale such as ways to share state and secret data, access controls for approving changes to infrastructure, a private registry for sharing Terraform modules, detailed policy controls for governing the contents of Terraform configurations, and more.
+
 Before begining this lesson ensure you have a Github account and create a fork of this repository. For this lab we'll need an ACI fabric which is accessible from the internet so that Terraform Cloud can access it via the API. This is not always possible with the reservable labs on DevNet sandbox and on dCloud so in this case we'll use the [always on sandbox](https://sandboxapicdc.cisco.com). Before doing this lab ensure that the DevNet always-on ACI sandbox is up and operational. 
 
 - First register for terraform cloud at [app.terraform.io](app.terraform.io)
