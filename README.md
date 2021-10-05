@@ -2716,7 +2716,7 @@ Click the Runs tab and the actions drop down then select "start a new plan". Thi
 
 When the plan completes, you should then see the option to Confirm and Apply
 
-Verify the resources have been created
+Verify the resources have been created on the APIC GUI.
 
 ## Optional: Other Useful Terraform Commands
 Here are some further Terraform commands you might find useful when working with the CLI
