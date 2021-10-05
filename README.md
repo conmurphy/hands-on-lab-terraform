@@ -2676,9 +2676,34 @@ https://www.terraform.io/docs/language/meta-arguments/for_each.html
 
 ## 7. Intro to Terraform Cloud
 
-- Fork the current repo 
+Before begining this lesson ensure you have a Github account and create a fork of this repository. For this lab we'll need an ACI fabric which is accessible from the internet so that Terraform Cloud can access it via the API. This is not always possible with the reservable labs on DevNet sandbox and on dCloud so in this case we'll use the [always on sandbox](https://sandboxapicdc.cisco.com). Before doing this lab ensure that the DevNet always-on ACI sandbox is up and operational. 
 
-[SCREENSHOTS HERE]
+- First register for terraform cloud at [app.terraform.io](app.terraform.io)
+
+- After registering, login to [Terraform.io](Terraform.io) from the main page select the create a new workspace option.
+
+- You'll be presented with a number of workflows. We want to link our Terraform Cloud instance with a Version Control System, in this case Github. Follow the prompts to link both accounts.
+
+- After connecting both accounts, you'll be asked to choose a repository that hosts your Terraform source code. Choose the "hands-on-lab-terraform"
+
+- Select "advanced options" as we have multiple lessons in this directory, each with their own terraform configs. Go to the working directory setting and enter "lesson_07" to ensure that Terraform Cloud excecutes in the right directory.
+
+- Save these settings by creating the workspace.
+
+- Now we've pointed Terraform to our config stored in our version control system we need to configure our variables that the config uses. From our workspace page Go to the Variables tab and set the following variables:
+
+```
+apic_url:https://sandboxapicdc.cisco.com 
+apic_username:admin
+apic_password:!v3G@!4@Y
+aci_tenant: tenant-<<yourCCOID>>
+```
+
+Click the Runs tab and the actions drop down then select "start a new plan". This will run a Terraform plan. The GUI equivalent of `Terraform Plan` from the CLI.
+
+When the plan completes, you should then see the option to Confirm and Apply
+
+Verify the resources have been created
 
 ## Optional: Other Useful Terraform Commands
 Here are some further Terraform commands you might find useful when working with the CLI
