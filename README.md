@@ -2684,15 +2684,22 @@ Before begining this lesson ensure you have a Github account and create a fork o
 
 - First register for terraform cloud at [app.terraform.io](app.terraform.io)
 
+![](/img/login.gif)
+
 - After registering, login to [Terraform.io](Terraform.io) from the main page select the create a new workspace option.
 
 - You'll be presented with a number of workflows. We want to link our Terraform Cloud instance with a Version Control System, in this case Github. Follow the prompts to link both accounts.
 
 - After connecting both accounts, you'll be asked to choose a repository that hosts your Terraform source code. Choose the "hands-on-lab-terraform"
 
+![](/img/workspace.gif)
+
 - Select "advanced options" as we have multiple lessons in this directory, each with their own terraform configs. Go to the working directory setting and enter "lesson_07" to ensure that Terraform Cloud excecutes in the right directory.
 
+
 - Save these settings by creating the workspace.
+
+![](/img/advanced.gif)
 
 - Now we've pointed Terraform to our config stored in our version control system we need to configure our variables that the config uses. From our workspace page Go to the Variables tab and set the following variables:
 
@@ -2702,6 +2709,8 @@ apic_username:admin
 apic_password:!v3G@!4@Y
 aci_tenant:tenant-<<yourCCOID>>
 ```
+
+![](/img/variables.gif)
 
 Click the Runs tab and the actions drop down then select "start a new plan". This will run a Terraform plan. The GUI equivalent of `Terraform Plan` from the CLI.
 
