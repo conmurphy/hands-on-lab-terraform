@@ -2696,7 +2696,6 @@ Before begining this lesson ensure you have a Github account and create a fork o
 
 - Select "advanced options" as we have multiple lessons in this directory, each with their own terraform configs. Go to the working directory setting and enter "lesson_07" to ensure that Terraform Cloud excecutes in the right directory.
 
-
 - Save these settings by creating the workspace.
 
 ![](/img/advanced.gif)
@@ -2714,7 +2713,12 @@ aci_tenant:tenant-<<yourCCOID>>
 
 Click the Runs tab and the actions drop down then select "start a new plan". This will run a Terraform plan. The GUI equivalent of `Terraform Plan` from the CLI.
 
+![](/img/plan.gif)
+
+
 When the plan completes, you should then see the option to Confirm and Apply
+
+![](/img/apply.gif)
 
 Verify the resources have been created on the APIC GUI.
 
