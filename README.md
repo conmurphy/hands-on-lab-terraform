@@ -88,13 +88,13 @@ Terraform is an increasingly popular open-source infrastructure as code software
 
   ```
   var.aci_tenant
-  Enter a value: conmurphy
+  Enter a value: conmurphy (use your own CCO here)
 
   var.apic_password
   Enter a value: C1sco12345
 
   var.apic_url
-  Enter a value: https://sandboxapicdc.cisco.com 
+  Enter a value: https://198.18.133.200
 
   var.apic_username
   Enter a value: admin
@@ -259,7 +259,7 @@ can't guarantee that exactly these actions will be performed if
   Enter a value: C1sco12345
 
   var.apic_url
-  Enter a value: https://sandboxapicdc.cisco.com 
+  Enter a value: https://198.18.133.200
 
   var.apic_username
   Enter a value: admin
@@ -325,7 +325,7 @@ can't guarantee that exactly these actions will be performed if
   Enter a value: C1sco12345
 
   var.apic_url
-  Enter a value: https://sandboxapicdc.cisco.com 
+  Enter a value: https://198.18.133.200
 
   var.apic_username
   Enter a value: admin
