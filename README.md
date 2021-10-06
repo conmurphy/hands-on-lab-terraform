@@ -1,3 +1,5 @@
+Terraform is an increasingly popular open-source infrastructure as code software tool built by HashiCorp. It enables you to define, provision and manage infrastructure across multiple cloud and datacenter resources. Terraform takes an infrastructure as code approach by using using a high-level configuration language known as Hashicorp Configuration Language to define the creation, modification and deletion resources. Terraform differs from traditional configuration management tools such as Ansible as it is known for keeping state of the infrastructure, once you define your desired state through Terraform config files. Terraform looks to build your infrastucture, records its current state and always looks to maintain the desired state the config specifies. In the next few exercises we will explore some of the key concepts behind Terraform.
+
 # Table of Contents
 - [Getting familiar with Terraform commands and files](#1-getting-familiar-with-terraform-commands-and-files)
 - [Config structure and variables](#2-config-structure-and-variables)
@@ -2676,9 +2678,49 @@ https://www.terraform.io/docs/language/meta-arguments/for_each.html
 
 ## 7. Intro to Terraform Cloud
 
-- Fork the current repo 
+In this module we'll  explore another method for using Terraform by using H Terraform Cloud which is a SaaS delivered service from Hashicorp. It manages Terraform runs in a consistent and reliable environment and addresses many common challenges of using Terraform at scale such as ways to share state and secret data, access controls for approving changes to infrastructure, a private registry for sharing Terraform modules, detailed policy controls for governing the contents of Terraform configurations, and more.
 
-[SCREENSHOTS HERE]
+Before begining this lesson ensure you have a Github account and create a fork of this repository. For this lab we'll need an ACI fabric which is accessible from the internet so that Terraform Cloud can access it via the API. This is not always possible with the reservable labs on DevNet sandbox and on dCloud so in this case we'll use the [always on sandbox](https://sandboxapicdc.cisco.com). Before doing this lab ensure that the DevNet always-on ACI sandbox is up and operational. 
+
+- First register for terraform cloud at [app.terraform.io](app.terraform.io)
+
+![](/img/login.gif)
+
+- After registering, login to [Terraform.io](Terraform.io) from the main page select the create a new workspace option.
+
+- You'll be presented with a number of workflows. We want to link our Terraform Cloud instance with a Version Control System, in this case Github. Follow the prompts to link both accounts.
+
+- After connecting both accounts, you'll be asked to choose a repository that hosts your Terraform source code. Choose the "hands-on-lab-terraform"
+
+![](/img/workspace.gif)
+
+- Select "advanced options" as we have multiple lessons in this directory, each with their own terraform configs. Go to the working directory setting and enter "lesson_07" to ensure that Terraform Cloud excecutes in the right directory.
+
+- Save these settings by creating the workspace.
+
+![](/img/advanced.gif)
+
+- Now we've pointed Terraform to our config stored in our version control system we need to configure our variables that the config uses. From our workspace page Go to the Variables tab and set the following variables:
+
+```
+apic_url:https://sandboxapicdc.cisco.com 
+apic_username:admin
+apic_password:!v3G@!4@Y
+aci_tenant:tenant-<<yourCCOID>>
+```
+
+![](/img/variables.gif)
+
+Click the Runs tab and the actions drop down then select "start a new plan". This will run a Terraform plan. The GUI equivalent of `Terraform Plan` from the CLI.
+
+![](/img/plan.gif)
+
+
+When the plan completes, you should then see the option to Confirm and Apply
+
+![](/img/apply.gif)
+
+Verify the resources have been created on the APIC GUI.
 
 ## Optional: Other Useful Terraform Commands
 Here are some further Terraform commands you might find useful when working with the CLI
