@@ -1,4 +1,3 @@
-
 resource "aci_tenant" "aci_tenant" {
   name        = var.aci_tenant    
 }
