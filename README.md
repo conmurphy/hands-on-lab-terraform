@@ -858,7 +858,7 @@ Windows
 
 Since our EPGs have a number of common properties we will store those in a local variable. If we need to change one in the future we only have to change it in this one place and all resources using the local variable will be updated.
 
-- Open the `aci.tf` file and have a look at the `resource "aci_application_epg"`. See how we can reference the local variables with `local.`. For example, `flood_on_encap = local.flood_on_encap`
+- Open the `aci.tf` file and have a look at the `resource "aci_application_epg"`. See how we can reference the local variables with `local.`. For example, `shutdown = local.shutdown`
 
 - Initialise Terraform - This will download the required Terraform providers  
 
@@ -907,74 +907,11 @@ Since our EPGs have a number of common properties we will store those in a local
   ```
 </details>
 
-- Open the `variables.tf` file and modified the  `local.flood_on_encap` variable from `enabled` to `disabled`
+- Open the `variables.tf` file and modified the  `local.shutdown` variable from `enabled` to `yes`
 
 - Run a plan and look at the results
 
 `terraform plan`
-
-<details>
-  <summary>Click to see expected output</summary>
-  
-  ```
-    aci_tenant.aci_tenant: Refreshing state... [id=uni/tn-conmurphy]
-    aci_application_profile.myWebsite: Refreshing state... [id=uni/tn-conmurphy/ap-my_website]
-    aci_bridge_domain.bd_for_subnet: Refreshing state... [id=uni/tn-conmurphy/BD-bd_for_subnet]
-    aci_application_epg.web: Refreshing state... [id=uni/tn-conmurphy/ap-my_website/epg-web]
-    aci_application_epg.db: Refreshing state... [id=uni/tn-conmurphy/ap-my_website/epg-db]
-    aci_subnet.demosubnet: Refreshing state... [id=uni/tn-conmurphy/BD-bd_for_subnet/subnet-[172.16.1.1/24]]
-
-    An execution plan has been generated and is shown below.
-    Resource actions are indicated with the following symbols:
-      ~ update in-place
-
-    Terraform will perform the following actions:
-
-      # aci_application_epg.db will be updated in-place
-      ~ resource "aci_application_epg" "db" {
-          ~ flood_on_encap               = "disabled" -> "enabled"
-          + fwd_ctrl                     = "none"
-            id                           = "uni/tn-conmurphy/ap-my_website/epg-db"
-            name                         = "db"
-            # (21 unchanged attributes hidden)
-        }
-
-      # aci_application_epg.web will be updated in-place
-      ~ resource "aci_application_epg" "web" {
-          ~ flood_on_encap               = "disabled" -> "enabled"
-          + fwd_ctrl                     = "none"
-            id                           = "uni/tn-conmurphy/ap-my_website/epg-web"
-            name                         = "web"
-            # (21 unchanged attributes hidden)
-        }
-
-    Plan: 0 to add, 2 to change, 0 to destroy.
-
-    Warning: Interpolation-only expressions are deprecated
-
-      on aci.tf line 7, in resource "aci_bridge_domain" "bd_for_subnet":
-      7:   tenant_dn   = "${aci_tenant.aci_tenant.id}"
-
-    Terraform 0.11 and earlier required all non-constant expressions to be
-    provided via interpolation syntax, but this pattern is now deprecated. To
-    silence this warning, remove the "${ sequence from the start and the }"
-    sequence from the end of this expression, leaving just the inner expression.
-
-    Template interpolation syntax is still used to construct strings from
-    expressions when the template includes multiple interpolation sequences or a
-    mixture of literal strings and interpolations. This deprecation applies only
-    to templates that consist entirely of a single interpolation sequence.
-
-    (and 4 more similar warnings elsewhere)
-
-
-    ------------------------------------------------------------------------
-
-    Note: You didn't specify an "-out" parameter to save this plan, so Terraform
-    can't guarantee that exactly these actions will be performed if
-    "terraform apply" is subsequently run.
-  ```
-</details>
 
 As you can see, we have updated the variable in one location but the two EPGs using this variable will automatically be updated. This becomes very useful when we are working with large quantities of resources that have common properties.
 
