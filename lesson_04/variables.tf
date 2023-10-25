@@ -4,7 +4,7 @@ variable "apic_password" {}
 variable "aci_app_name" {}
 
 locals {
-    flood_on_encap    = "enabled"
+    flood_on_encap    = "disabled"
     fwd_ctrl          = "none"
     has_mcast_source  = "no"
     match_t           = "AtleastOne"
