@@ -12,6 +12,23 @@ Terraform is an increasingly popular open-source infrastructure as code software
 - [Optional: Other Useful Terraform Commands](#optional--other-useful-terraform-commands)
 - [References](#references)
 
+## Installation of Tools
+
+- Install Git for Windows from this link
+  
+[https://github.com/git-for-windows/git/releases/download/v2.42.0.windows.2/Git-2.42.0.2-64-bit.exe](https://github.com/git-for-windows/git/releases/download/v2.42.0.windows.2/Git-2.42.0.2-64-bit.exe)
+
+- Install Terraform from this link
+- Double-click on the zip file and move the `terraform` binary to the `C:\Windows\System32` binary
+
+[https://releases.hashicorp.com/terraform/1.6.2/terraform_1.6.2_windows_amd64.zip](https://releases.hashicorp.com/terraform/1.6.2/terraform_1.6.2_windows_amd64.zip)
+
+- Install VSCode from this link
+
+[https://code.visualstudio.com/sha/download?build=stable&os=win32-x64-user](https://code.visualstudio.com/sha/download?build=stable&os=win32-x64-user)
+
+
+
 ## 1. Getting familiar with Terraform commands and files
 - Clone the following Git repository
 
@@ -313,8 +330,6 @@ can't guarantee that exactly these actions will be performed if
 `terraform destroy -auto-approve`
 
  - You will need to enter the ACI URL, username, and password. Use your **username** for the tenant name
-
- - You will also need to type `yes` when asked if you really want to destroy all resources? 
 
 
   ```
