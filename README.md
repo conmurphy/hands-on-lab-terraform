@@ -922,7 +922,7 @@ Since our EPGs have a number of common properties we will store those in a local
   ```
 </details>
 
-- Open the `variables.tf` file and modified the  `local.shutdown` variable from `enabled` to `yes`
+- Open the `variables.tf` file and modified the  `local.shutdown` variable from `no` to `yes`
 
 - Run a plan and look at the results
 
