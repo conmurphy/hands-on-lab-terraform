@@ -19,7 +19,7 @@ Terraform is an increasingly popular open-source infrastructure as code software
 [https://github.com/git-for-windows/git/releases/download/v2.42.0.windows.2/Git-2.42.0.2-64-bit.exe](https://github.com/git-for-windows/git/releases/download/v2.42.0.windows.2/Git-2.42.0.2-64-bit.exe)
 
 - Install Terraform from this link
-- Double-click on the zip file and move the `terraform` binary to the `C:\Windows\System32` binary
+- Double-click on the zip file and move the `terraform` binary to a folder on your path e.g. C:\Windows
 
 [https://releases.hashicorp.com/terraform/1.6.2/terraform_1.6.2_windows_amd64.zip](https://releases.hashicorp.com/terraform/1.6.2/terraform_1.6.2_windows_amd64.zip)
 
