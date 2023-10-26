@@ -1959,7 +1959,7 @@ We can achieve this with `import`
 
 https://www.terraform.io/docs/cli/import/index.html
 
-Terraform import requires the format, `terraform import <address> <id>`. With ACI, the ID is the Distinguished Name of the ACI object.
+Terraform import requires the format, `terraform import <resource_name>.<resource_instance_name> <id>`. With ACI, the ID is the Distinguished Name of the ACI object.
 
 - Import the existing ACI resources. **IMPORTANT NOTE: `Terraform import` requires your configuration to already exist and only imports the state.**
 
