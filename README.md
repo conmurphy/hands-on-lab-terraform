@@ -1351,7 +1351,7 @@ Since we effectively removed the statefile, Terraform did not know the ACI objec
   ```
 </details>
 
-As you can see the apply should have gone through successfully, even though the ACI objects already exist. **Note that this behaviour is dependent on the Terraform provider.**
+As you can see the apply should have gone through successfully, even though the ACI objects already exist. **Note that this behaviour is dependent on the endpoint. In the case of the ACI API, if an object already exists it is updated but if it doesn't exist it will be created**
 
 **In some cases you may receive an error that the object already exists. In that case you would need to import the existing configuration into your Terraform state file.**
 
